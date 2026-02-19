@@ -21,13 +21,10 @@ public partial class Utenti
 
     public DateTime? DataUltimaModifica { get; set; }
 
-    public int? UtenteUltimaModifica { get; set; }
 
     public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
 
-    public virtual ICollection<Utenti> InverseUtenteUltimaModificaNavigation { get; set; } = new List<Utenti>();
-
     public virtual ICollection<Preferiti> Preferitis { get; set; } = new List<Preferiti>();
 
-    public virtual Utenti? UtenteUltimaModificaNavigation { get; set; }
+
 }

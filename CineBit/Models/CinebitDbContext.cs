@@ -89,9 +89,6 @@ public partial class CinebitDbContext : DbContext
             entity.ToTable("utenti");
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
-
-            entity.HasIndex(e => e.UtenteUltimaModifica, "fk_utente_modifica");
-
             entity.Property(e => e.IdUtente).HasColumnName("id_utente");
             entity.Property(e => e.Cognome)
                 .HasMaxLength(50)
@@ -117,11 +114,6 @@ public partial class CinebitDbContext : DbContext
             entity.Property(e => e.Stato)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("stato");
-            entity.Property(e => e.UtenteUltimaModifica).HasColumnName("utente_ultima_modifica");
-
-            entity.HasOne(d => d.UtenteUltimaModificaNavigation).WithMany(p => p.InverseUtenteUltimaModificaNavigation)
-                .HasForeignKey(d => d.UtenteUltimaModifica)
-                .HasConstraintName("fk_utente_modifica");
         });
 
         OnModelCreatingPartial(modelBuilder);
