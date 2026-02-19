@@ -1,56 +1,51 @@
 # CineBit
+# Database – Versione 1
 
+## Schema del Database
+Il database di CineBit è composto da quattro tabelle principali:
+film, utenti, preferiti, chat.
 
+## Tabella: film
+Contiene i dati dei film importati da TMDB.
 
-# db versione 1
-/*
-schema db cinebit 
-
-- tabella film (preso da tmdb) -- > info su discord
-	campi:
-		"adult": false,
-		"backdrop_path": "/zfbjgQE1uSd9wiPTX4VzsLi0rGG.jpg",
-		"genre_ids": [
-			18,
-			80
-		],
-		"id": 278,
-		"original_language": "en",
-		"original_title": "The Shawshank Redemption",
-		"overview": "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-		"popularity": 39.8005,
-		"poster_path": "/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
-		"release_date": "1994-09-23",
-		"title": "The Shawshank Redemption",
-		"video": false,
-		"vote_average": 8.715,
-		"vote_count": 29744
-
-- tabella utenti
-	campi :
-		id_utente
-        nome
-        cognome
-        mail
-        password (hash)
-        stato -- > BOOL (attivo = true / non attivo = false)
-        ruolo -- > BOOL(admin=true / utente=false)
-        data_ultima_modifica
-		utente_ultima_modifica
-    
-- tabella preferiti
-	campi : 
-		id_prefe
-        titolo
-        id_utente (FK)
-        id_film(FK)
-    
-- tabella chat
-	campi :
-		id_chat
-		prompt
-        response
-	
-    
-
-*/
+Campi
+- Campo	Tipo	Descrizione
+- adult	BOOL	Indica se il film è per adulti
+- backdrop_path	TEXT	Percorso immagine di sfondo
+- genre_ids	ARRAY(INT)	Lista ID dei generi
+- id	INT	ID univoco del film (TMDB)
+- original_language	TEXT	Lingua originale
+- original_title	TEXT	Titolo originale
+- overview	TEXT	Trama
+- popularity	FLOAT	Popolarità
+- poster_path	TEXT	Percorso poster
+- release_date	DATE	Data di uscita
+- title	TEXT	Titolo
+- video	BOOL	Indica se è un video
+- vote_average	FLOAT	Media voti
+- vote_count	INT	Numero voti
+## Tabella: utenti
+- Campi
+- Campo	Tipo	Descrizione
+- id_utente	INT	ID univoco utente
+- nome	TEXT	Nome
+- cognome	TEXT	Cognome
+- mail	TEXT	Email
+- password	TEXT (hash)	Password criptata
+- stato	BOOL	Attivo = true / Non attivo = false
+- ruolo	BOOL	Admin = true / Utente = false
+- data_ultima_modifica	TIMESTAMP	Data ultima modifica
+- utente_ultima_modifica	INT	ID utente che ha effettuato la modifica
+## Tabella: preferiti
+- Campi
+- Campo	Tipo	Descrizione
+- id_prefe	INT	ID univoco preferito
+- titolo	TEXT	Titolo del film salvato
+- id_utente	INT (FK)	Utente proprietario
+- id_film	INT (FK)	Film salvato
+## Tabella: chat
+- Campi
+- Campo	Tipo	Descrizione
+- id_chat	INT	ID univoco chat
+- prompt	TEXT	Input dell’utente
+- response	TEXT	Risposta generata
