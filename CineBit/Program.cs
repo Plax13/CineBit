@@ -11,6 +11,9 @@ builder.Services.AddDbContext<CinebitDbContext>(options =>
 // Registrazione repository generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+// Registrazione HttpClientFactory
+builder.Services.AddHttpClient(); // <--- questa riga serve al FilmController
+
 // Aggiungi controller
 builder.Services.AddControllers();
 

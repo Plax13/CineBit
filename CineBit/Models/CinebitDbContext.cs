@@ -23,8 +23,7 @@ public partial class CinebitDbContext : DbContext
     public virtual DbSet<Utenti> Utentis { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;port=3306;database=cinebit_db;user=root;password=varde", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
+    { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -90,7 +89,7 @@ public partial class CinebitDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
-            entity.HasIndex(e => e.UtenteUltimaModifica, "fk_utente_modifica");
+
 
             entity.Property(e => e.IdUtente).HasColumnName("id_utente");
             entity.Property(e => e.Cognome)
@@ -117,11 +116,7 @@ public partial class CinebitDbContext : DbContext
             entity.Property(e => e.Stato)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("stato");
-            entity.Property(e => e.UtenteUltimaModifica).HasColumnName("utente_ultima_modifica");
 
-            entity.HasOne(d => d.UtenteUltimaModificaNavigation).WithMany(p => p.InverseUtenteUltimaModificaNavigation)
-                .HasForeignKey(d => d.UtenteUltimaModifica)
-                .HasConstraintName("fk_utente_modifica");
         });
 
         OnModelCreatingPartial(modelBuilder);
