@@ -50,7 +50,7 @@ namespace CineBit.Controllers
 
 
             // Utl completo API TMDB
-            string url = $"https://api.themoviedb.org/3/search/movie?api_key={ApiKey}&{queryParams}";
+            string url = $"https://api.themoviedb.org/3/search/movie?api_key={_apiKey}&{queryParams}";
             
             // Chiamata http get su TMDB
             var response = await _httpClient.GetAsync(url);
