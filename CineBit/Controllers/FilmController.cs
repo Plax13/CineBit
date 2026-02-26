@@ -41,12 +41,12 @@ namespace CineBit.Controllers
         [HttpGet("{id}/card")]
         public async Task<IActionResult> GetCardFilm(int id)
         {
-            // Costruisce la richiesta all'API TMDB per ottenere i dati base del film
-            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
+            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";s
+
             var response = await _httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, "Errore TMDB");
+                return StatusCode((int)response.StatusCode, "Ergrore TMDB");
 
             // Legge e deserializza il JSON della risposta
             var json = await response.Content.ReadAsStringAsync();
