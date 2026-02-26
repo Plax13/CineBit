@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Text.Json;
-using System.Web;
+using System.Linq;
 
 namespace CineBit.Controllers
 {
@@ -11,7 +11,7 @@ namespace CineBit.Controllers
     [ApiController]
     public class FilmController : ControllerBase
     {
-        
+       
         // HttpClient per fare richieste HTTp verso l'API TMDB
         private readonly HttpClient _httpClient;
 
@@ -25,48 +25,101 @@ namespace CineBit.Controllers
             // Legge la chiave API dal JSON: appsettings.json deve avere
             // "TMDB": { "ApiKey": "LA_TUA_CHIAVE" }
             _apiKey = config["TMDB:ApiKey"];
-            // ATTENZIONE: nel tuo codice attuale usi "ApiKey" -> dev'essere "TMDB:ApiKey"
+            //dev'essere "TMDB:ApiKey"
         }
 
-        /*Ricerca Film tramit parametri passati nel body della richiesta,
-         Endpoint POST: /api/film/ricerca
-        Oggetto name = "dto" oggetto contenente Titolo Genere Anno
-        Json con risultati della ricerca trmite TMDB*/
-        [HttpPost("ricerca")]
-        public async Task<IActionResult> Ricerca([FromBody] FilmRicercaDto dto)
+        // ==========================
+        // Endpoint per la "Card" / preview leggera del film
+        // ==========================
+        // GET api/film/{id}/card
+        // Restituisce un oggetto leggero con solo:
+        // - Titolo
+        // - Anno
+        // - Immagine poster
+        // - ID del film
+        // Utile per popolare la griglia dei risultati senza appesantire il frontend
+        [HttpGet("{id}/card")]
+        public async Task<IActionResult> GetCardFilm(int id)
         {
-            // Collection di query string vuota
-            var queryParams = HttpUtility.ParseQueryString(string.Empty);
-
-            //Se titolo, genere, anno non sono null, lo aggiungiamo
-            if (!string.IsNullOrEmpty(dto.Titolo))
-                queryParams["query"] = dto.Titolo;
-            if (!string.IsNullOrEmpty(dto.Genere))
-                queryParams["with_genres"] = dto.Genere;
-            if (dto.Anno.HasValue)
-                queryParams["primary_release_year"] = dto.Anno.Value.ToString();
-
-            //es : query=Inception&with_genres=28&primary_release_year=2010
-
-
-            // Utl completo API TMDB
-            string url = $"https://api.themoviedb.org/3/search/movie?api_key={ApiKey}&{queryParams}";
-            
-            // Chiamata http get su TMDB
+            // Costruisce la richiesta all'API TMDB per ottenere i dati base del film
+            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
             var response = await _httpClient.GetAsync(url);
-            
-            //Se la chiamata non funge, ritorno l'errore con codice Http
+
             if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, "Errore API TMDB");
+                return StatusCode((int)response.StatusCode, "Errore TMDB");
 
-            // leggo il contenuto del json
+            // Legge e deserializza il JSON della risposta
             var json = await response.Content.ReadAsStringAsync();
+            var data = JsonDocument.Parse(json).RootElement;
 
-            //deserializzo il json in modo generico
-            var results = JsonSerializer.Deserialize<JsonElement>(json);
+            // Costruisce l'oggetto leggero da restituire al frontend
+            var card = new
+            {
+                Id = id,
+                Titolo = data.GetProperty("title").GetString(),
+                Anno = data.GetProperty("release_date").GetString()?.Substring(0, 4),
+                Immagine = "https://image.tmdb.org/t/p/w500" + data.GetProperty("poster_path").GetString()
+            };
 
-            //ritorno json
-            return Ok(results);
+            return Ok(card);
+        }
+
+        // Endpoint per i dettagli completi del film
+        // GET api/film/{id}/dettagli
+        // Restituisce tutte le informazioni necessarie per la pagina di dettaglio: Titolo, Genere (array), Anno di uscita, Durata, Regist, Attori principali (top 5)
+        [HttpGet("{id}/dettagli")]
+        public async Task<IActionResult> GetDettagliFilm(int id)
+        {
+            // Ottengo i dati base del film
+            string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
+            var movieResponse = await _httpClient.GetAsync(movieUrl);
+
+            if (!movieResponse.IsSuccessStatusCode)
+                return StatusCode((int)movieResponse.StatusCode, "Errore TMDB film");
+
+            var movieJson = await movieResponse.Content.ReadAsStringAsync();
+            var movieData = JsonDocument.Parse(movieJson).RootElement;
+
+            //Ottengo i credits per estrarre regista e attori
+            string creditsUrl = $"https://api.themoviedb.org/3/movie/{id}/credits?api_key={_apiKey}&language=it-IT";
+            var creditsResponse = await _httpClient.GetAsync(creditsUrl);
+
+            if (!creditsResponse.IsSuccessStatusCode)
+                return StatusCode((int)creditsResponse.StatusCode, "Errore TMDB credits");
+
+            var creditsJson = await creditsResponse.Content.ReadAsStringAsync();
+            var creditsData = JsonDocument.Parse(creditsJson).RootElement;
+
+            // Estrae il regista (job == "Director")
+            var crewElement = creditsData.GetProperty("crew")
+                .EnumerateArray()
+                .FirstOrDefault(x => x.GetProperty("job").GetString() == "Director");
+
+            string regista = crewElement.ValueKind != JsonValueKind.Undefined
+                ? crewElement.GetProperty("name").GetString()
+                : null;
+
+            // Estraggo i primi 5 attori principali
+            var attori = creditsData.GetProperty("cast")
+                .EnumerateArray()
+                .Take(5)
+                .Select(x => x.GetProperty("name").GetString())
+                .ToList();
+
+            //  Costruisco oggetto da restituire
+            var risultato = new
+            {
+                Titolo = movieData.GetProperty("title").GetString(),
+                Genere = movieData.GetProperty("genres")
+                    .EnumerateArray()
+                    .Select(g => g.GetProperty("name").GetString()),
+                AnnoUscita = movieData.GetProperty("release_date").GetString()?.Substring(0, 4),
+                Durata = movieData.GetProperty("runtime").GetInt32(),
+                Regista = regista,
+                Attori = attori
+            };
+
+            return Ok(risultato);
         }
     }
 }
