@@ -26,3 +26,4 @@ public partial class Utenti
     public virtual ICollection<Preferiti> Preferitis { get; set; } = new List<Preferiti>();
 }
 
+

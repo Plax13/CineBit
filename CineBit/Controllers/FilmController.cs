@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Text.Json;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace CineBit.Controllers
     [ApiController]
     public class FilmController : ControllerBase
     {
-       
+
         // HttpClient per fare richieste HTTp verso l'API TMDB
         private readonly HttpClient _httpClient;
 
@@ -41,7 +42,7 @@ namespace CineBit.Controllers
         [HttpGet("{id}/card")]
         public async Task<IActionResult> GetCardFilm(int id)
         {
-            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";s
+            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
 
             var response = await _httpClient.GetAsync(url);
 
