@@ -22,8 +22,7 @@ public partial class CinebitDbContext : DbContext
 
     public virtual DbSet<Utenti> Utentis { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -88,9 +87,6 @@ public partial class CinebitDbContext : DbContext
             entity.ToTable("utenti");
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
-
-
-
             entity.Property(e => e.IdUtente).HasColumnName("id_utente");
             entity.Property(e => e.Cognome)
                 .HasMaxLength(50)
@@ -116,7 +112,6 @@ public partial class CinebitDbContext : DbContext
             entity.Property(e => e.Stato)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("stato");
-
         });
 
         OnModelCreatingPartial(modelBuilder);
