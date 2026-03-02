@@ -10,6 +10,9 @@ builder.Services.AddDbContext<CinebitDbContext>(options =>
 
 // Registrazione repository generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IUtentiRepo), typeof(UtentiRepository));
+
+builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
 // Aggiungi controller
 builder.Services.AddControllers();

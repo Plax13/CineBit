@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CineBit.Models;
 
-public partial class Utenti
+public partial class Utente
 {
     public int IdUtente { get; set; }
 
@@ -24,7 +24,7 @@ public partial class Utenti
 
     public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
 
-    public virtual ICollection<Preferiti> Preferitis { get; set; } = new List<Preferiti>();
+    public virtual ICollection<Preferito> Preferitis { get; set; } = new List<Preferito>();
 
 
 }

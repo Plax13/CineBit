@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CineBit.Models;
 
-public partial class Preferiti
+public partial class Preferito
 {
     public int IdPrefe { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Preferiti
 
     public DateTime? DataAggiunta { get; set; }
 
-    public virtual Utenti IdUtenteNavigation { get; set; } = null!;
+    public virtual Utente IdUtenteNavigation { get; set; } = null!;
 }

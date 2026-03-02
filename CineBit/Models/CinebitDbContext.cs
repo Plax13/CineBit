@@ -18,9 +18,9 @@ public partial class CinebitDbContext : DbContext
 
     public virtual DbSet<Chat> Chats { get; set; }
 
-    public virtual DbSet<Preferiti> Preferitis { get; set; }
+    public virtual DbSet<Preferito> Preferitis { get; set; }
 
-    public virtual DbSet<Utenti> Utentis { get; set; }
+    public virtual DbSet<Utente> Utentis { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -58,7 +58,7 @@ public partial class CinebitDbContext : DbContext
                 .HasConstraintName("fk_chat_utente");
         });
 
-        modelBuilder.Entity<Preferiti>(entity =>
+        modelBuilder.Entity<Preferito>(entity =>
         {
             entity.HasKey(e => e.IdPrefe).HasName("PRIMARY");
 
@@ -82,7 +82,7 @@ public partial class CinebitDbContext : DbContext
                 .HasConstraintName("fk_preferiti_utente");
         });
 
-        modelBuilder.Entity<Utenti>(entity =>
+        modelBuilder.Entity<Utente>(entity =>
         {
             entity.HasKey(e => e.IdUtente).HasName("PRIMARY");
 

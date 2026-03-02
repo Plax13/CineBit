@@ -15,5 +15,5 @@ public partial class Chat
 
     public DateTime? DataCreazione { get; set; }
 
-    public virtual Utenti IdUtenteNavigation { get; set; } = null!;
+    public virtual Utente IdUtenteNavigation { get; set; } = null!;
 }
