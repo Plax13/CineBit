@@ -11,12 +11,30 @@ builder.Services.AddDbContext<CinebitDbContext>(options =>
 // Registrazione repository generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+// Registrazione HttpClientFactory
+builder.Services.AddHttpClient();
+
 // Aggiungi controller
 builder.Services.AddControllers();
 
+// --- Aggiungi CORS (Cross-Origin Resource Sharing) per far comunicare le porte 5000 <-> 4200 ---
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
+// --- abilita CORS per comunicazion porta 4200 <-> 5000 ---
+app.UseCors();
+
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
