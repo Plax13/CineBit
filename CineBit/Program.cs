@@ -17,6 +17,11 @@ builder.Services.AddHttpClient();
 // Aggiungi controller
 builder.Services.AddControllers();
 
+// Aggiungi i servizi per la dependency injection (gestione ottimizzata delle chiamate HTTP)
+builder.Services.AddHttpClient<AiService>();
+builder.Services.AddHttpClient<TmdbService>();
+
+
 // --- Aggiungi CORS (Cross-Origin Resource Sharing) per far comunicare le porte 5000 <-> 4200 ---
 builder.Services.AddCors(options =>
 {
