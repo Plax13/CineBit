@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+using System;
+using System.Collections.Generic;
 
 namespace CineBit.Models;
 
-public partial class CinebitDbContext : DbContext
+public partial class CinebitDbContext : IdentityDbContext<Utente, IdentityRole<int>, int>
 {
-    public CinebitDbContext()
-    {
-    }
 
     public CinebitDbContext(DbContextOptions<CinebitDbContext> options)
         : base(options)
@@ -17,21 +16,13 @@ public partial class CinebitDbContext : DbContext
     }
 
     public virtual DbSet<Chat> Chats { get; set; }
+    public virtual DbSet<Preferito> Preferiti { get; set; }
 
-    public virtual DbSet<Preferito> Preferitis { get; set; }
-
-    public virtual DbSet<Utente> Utentis { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseMySql("server=localhost;port=3306;database=cinebit_db;user=root;password=varde", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .UseCollation("utf8mb4_0900_ai_ci")
-            .HasCharSet("utf8mb4");
 
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Chat>(entity =>
         {
             entity.HasKey(e => e.IdChat).HasName("PRIMARY");
@@ -81,42 +72,7 @@ public partial class CinebitDbContext : DbContext
                 .HasForeignKey(d => d.IdUtente)
                 .HasConstraintName("fk_preferiti_utente");
         });
-
-        modelBuilder.Entity<Utente>(entity =>
-        {
-            entity.HasKey(e => e.IdUtente).HasName("PRIMARY");
-
-            entity.ToTable("utenti");
-
-            entity.HasIndex(e => e.Email, "email").IsUnique();
-            entity.Property(e => e.IdUtente).HasColumnName("id_utente");
-            entity.Property(e => e.Cognome)
-                .HasMaxLength(50)
-                .HasColumnName("cognome");
-            entity.Property(e => e.DataUltimaModifica)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("data_ultima_modifica");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.Nome)
-                .HasMaxLength(50)
-                .HasColumnName("nome");
-            entity.Property(e => e.Password)
-                .HasMaxLength(255)
-                .HasColumnName("password");
-            entity.Property(e => e.Ruolo)
-                .HasMaxLength(20)
-                .HasDefaultValueSql("'user'")
-                .HasColumnName("ruolo");
-            entity.Property(e => e.Stato)
-                .HasDefaultValueSql("'1'")
-                .HasColumnName("stato");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
+        
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

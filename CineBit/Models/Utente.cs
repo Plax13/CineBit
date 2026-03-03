@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace CineBit.Models;
 
-public partial class Utente
+public partial class Utente : IdentityUser<int>
 {
     public int IdUtente { get; set; }
 
@@ -11,13 +12,9 @@ public partial class Utente
 
     public string Cognome { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-
     public bool? Stato { get; set; }
 
-    public string? Ruolo { get; set; }
+    public Role Ruolo { get; set; } = Role.Utente;
 
     public DateTime? DataUltimaModifica { get; set; }
 

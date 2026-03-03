@@ -1,20 +1,21 @@
 using CineBit.Models;
+using Microsoft.AspNetCore.Identity; 
 
 public class UserService : IUserService
 {
-    private readonly IUtentiRepo _userRepository;
+    private readonly UserManager<Utente> _userManager;
 
-    public UserService(IUtentiRepo userRepository)
+    public UserService(UserManager<Utente> userManager)
     {
-        _userRepository = userRepository;
-
+        _userManager = userManager;
     }
 
     public async Task RegisterAsync(RegisterRequest request)
     {
         var email = request.Email.Trim().ToLower();
 
-        var existingUser = await _userRepository.GetByEmailAsync(email);
+
+        var existingUser = await _userManager.FindByEmailAsync(email);
         if (existingUser != null)
             throw new Exception("Email già registrata");
 
@@ -22,30 +23,31 @@ public class UserService : IUserService
         {
             Nome = request.Nome,
             Cognome = request.Cognome,
+            UserName = email, 
             Email = email,
-            Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Ruolo = "Utente"
+            Ruolo = Role.Utente
         };
 
-        await _userRepository.AddAsync(user);
-        await _userRepository.SaveChangesAsync();
+        var result = await _userManager.CreateAsync(user, request.Password);
 
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new Exception($"Errore registrazione: {errors}");
+        }
     }
 
     public async Task LoginAsync(LoginRequest request)
     {
-        var email = request.Email.Trim().ToLower();
+        var user = await _userManager.FindByEmailAsync(request.Email.Trim().ToLower());
 
-        var user = await _userRepository.GetByEmailAsync(email);
         if (user == null)
             throw new UnauthorizedAccessException("Credenziali non valide");
 
-        var validPassword = BCrypt.Net.BCrypt
-            .Verify(request.Password, user.Password);
 
-        if (!validPassword)
+        var result = await _userManager.CheckPasswordAsync(user, request.Password);
+
+        if (!result)
             throw new UnauthorizedAccessException("Credenziali non valide");
-
-
     }
 }

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CineBit.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CineBit.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UtenteController : ControllerBase
     {
         private readonly IRepository<Utente> _repository;
