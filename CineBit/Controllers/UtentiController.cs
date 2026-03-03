@@ -5,16 +5,16 @@ namespace CineBit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UtentiController : ControllerBase
+    public class UtenteController : ControllerBase
     {
         private readonly IRepository<Utenti> _repository;
 
-        public UtentiController(IRepository<Utenti> repository)
+        public UtenteController(IRepository<Utenti> repository)
         {
             _repository = repository;
         }
 
-        // GET: api/utenti
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

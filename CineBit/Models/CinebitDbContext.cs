@@ -18,7 +18,7 @@ public partial class CinebitDbContext : DbContext
 
     public virtual DbSet<Chat> Chats { get; set; }
 
-    public virtual DbSet<Preferiti> Preferitis { get; set; }
+    public virtual DbSet<Preferito> Preferitis { get; set; }
 
     public virtual DbSet<Utenti> Utentis { get; set; }
 
@@ -56,7 +56,7 @@ public partial class CinebitDbContext : DbContext
                 .HasConstraintName("fk_chat_utente");
         });
 
-        modelBuilder.Entity<Preferiti>(entity =>
+        modelBuilder.Entity<Preferito>(entity =>
         {
             entity.HasKey(e => e.IdPrefe).HasName("PRIMARY");
 
