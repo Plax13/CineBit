@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\CineBit",
+    "\\CineBit\\Controllers",
+    "\\CineBit\\Models",
+    "\\CineBit\\Properties",
+    "\\CineBit\\Repository",
+    "\\CineBit\\Services"
+  ],
+  "SelectedNode": "\\CineBit\\CineBit.csproj",
+  "PreviewInSolutionExplorer": false
+}

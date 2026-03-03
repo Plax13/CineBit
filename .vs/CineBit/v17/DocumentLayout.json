@@ -1,0 +1,279 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\TmdbService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Services\\TmdbService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\AiService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Services\\AiService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Utenti.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\Utenti.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\TmdbModels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\TmdbModels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\SearchRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\SearchRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Preferiti.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\Preferiti.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\FilmRicercaDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\FilmRicercaDto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\CinebitDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\CinebitDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\Chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\AiParameters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Models\\AiParameters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\UtentiController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Controllers\\UtentiController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\MovieSearchController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Controllers\\MovieSearchController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\FilmController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CineBit\\Controllers\\FilmController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Program.cs",
+              "RelativeDocumentMoniker": "CineBit\\Program.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Program.cs",
+              "RelativeToolTip": "CineBit\\Program.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAuwBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:35:28.027Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AiService.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\AiService.cs",
+              "RelativeDocumentMoniker": "CineBit\\Services\\AiService.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\AiService.cs",
+              "RelativeToolTip": "CineBit\\Services\\AiService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:40:00.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\appsettings.json",
+              "RelativeDocumentMoniker": "CineBit\\appsettings.json",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\appsettings.json",
+              "RelativeToolTip": "CineBit\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-02T15:51:19.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TmdbService.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\TmdbService.cs",
+              "RelativeDocumentMoniker": "CineBit\\Services\\TmdbService.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Services\\TmdbService.cs",
+              "RelativeToolTip": "CineBit\\Services\\TmdbService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:40:03.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Utenti.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Utenti.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\Utenti.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Utenti.cs",
+              "RelativeToolTip": "CineBit\\Models\\Utenti.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:48.256Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TmdbModels.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\TmdbModels.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\TmdbModels.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\TmdbModels.cs",
+              "RelativeToolTip": "CineBit\\Models\\TmdbModels.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:38.162Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SearchRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\SearchRequest.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\SearchRequest.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\SearchRequest.cs",
+              "RelativeToolTip": "CineBit\\Models\\SearchRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:36.409Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Preferiti.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Preferiti.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\Preferiti.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Preferiti.cs",
+              "RelativeToolTip": "CineBit\\Models\\Preferiti.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:34.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AiParameters.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\AiParameters.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\AiParameters.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\AiParameters.cs",
+              "RelativeToolTip": "CineBit\\Models\\AiParameters.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:28.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UtentiController.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\UtentiController.cs",
+              "RelativeDocumentMoniker": "CineBit\\Controllers\\UtentiController.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\UtentiController.cs",
+              "RelativeToolTip": "CineBit\\Controllers\\UtentiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:39:25.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "MovieSearchController.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\MovieSearchController.cs",
+              "RelativeDocumentMoniker": "CineBit\\Controllers\\MovieSearchController.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\MovieSearchController.cs",
+              "RelativeToolTip": "CineBit\\Controllers\\MovieSearchController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:32:12.706Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Chat.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Chat.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\Chat.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\Chat.cs",
+              "RelativeToolTip": "CineBit\\Models\\Chat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:23:28.6Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CinebitDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\CinebitDbContext.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\CinebitDbContext.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\CinebitDbContext.cs",
+              "RelativeToolTip": "CineBit\\Models\\CinebitDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:23:34.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FilmRicercaDto.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\FilmRicercaDto.cs",
+              "RelativeDocumentMoniker": "CineBit\\Models\\FilmRicercaDto.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Models\\FilmRicercaDto.cs",
+              "RelativeToolTip": "CineBit\\Models\\FilmRicercaDto.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:25:04.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "FilmController.cs",
+              "DocumentMoniker": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\FilmController.cs",
+              "RelativeDocumentMoniker": "CineBit\\Controllers\\FilmController.cs",
+              "ToolTip": "C:\\Users\\Domenico Vard\u00E8\\Desktop\\CineBit\\CineBit\\Controllers\\FilmController.cs",
+              "RelativeToolTip": "CineBit\\Controllers\\FilmController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T16:25:45.766Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
