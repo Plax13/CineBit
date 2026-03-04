@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -6,21 +8,14 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   isLogged = false;
 
-  // Lista utenti registrati
-  private utenti: { nome: string, email: string, password: string }[] = [];
+  constructor(private http: HttpClient) {}
 
-  register(nome: string, email: string, password: string): void {
-    this.utenti.push({ nome, email, password });
-    console.log('Utente registrato:', { nome, email });
+    login(email: string, password: string) {
+    return this.http.post(`${environment.apiUrl}/api/auth/login`, { email, password });
   }
 
-  login(email: string, password: string): boolean {
-    const trovato = this.utenti.find(u => u.email === email && u.password === password);
-    if (trovato) {
-      this.isLogged = true;
-      return true;
-    }
-    return false;
+  register(nome: string, email: string, password: string) {
+    return this.http.post(`${environment.apiUrl}/api/auth/register`, { nome, email, password });
   }
 
   logout() {

@@ -36,7 +36,13 @@ export class Signup {
   }
 
   onSubmit() {
-    this.auth.register(this.nome, this.email, this.password);
-    this.router.navigate(['login']); // ← dopo registrazione vai al login
-  }
+  this.auth.register(this.nome, this.email, this.password).subscribe({
+    next: () => {
+      this.router.navigate(['login']);
+    },
+    error: () => {
+      console.error('Errore durante la registrazione');
+    }
+  });
+}
 }

@@ -21,11 +21,14 @@ export class Login {
   constructor(private auth: AuthService, private router: Router) {}
 
   onSubmit() {
-    const ok = this.auth.login(this.email, this.password);
-    if (ok) {
-      this.router.navigate(['explore']); // ← vai alla home
-    } else {
+  this.auth.login(this.email, this.password).subscribe({
+    next: () => {
+      this.auth.isLogged = true;
+      this.router.navigate(['explore']);
+    },
+    error: () => {
       this.errore = 'Email o password errati';
     }
-  }
+  });
+}
 }
