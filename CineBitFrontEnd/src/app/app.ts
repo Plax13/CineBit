@@ -5,11 +5,13 @@ import { Explore } from './pages/explore/explore';
 import { Landing } from './pages/landing/landing';
 import { UiButton } from './shared/ui/ui-button/ui-button';
 import { UiPage } from './shared/ui/ui-page/ui-page';
+import { RouterLink } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Detail, Explore, Landing, UiButton, UiPage  ],
+  imports: [RouterOutlet, Detail, Explore, Landing, UiButton, UiPage, RouterLink  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
   
