@@ -18,13 +18,11 @@ public partial class CinebitDbContext : DbContext
 
     public virtual DbSet<Chat> Chats { get; set; }
 
-    public virtual DbSet<Preferiti> Preferitis { get; set; }
+    public virtual DbSet<Preferito> Preferitis { get; set; }
 
     public virtual DbSet<Utenti> Utentis { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseMySql("server=localhost;port=3306;database=cinebit_db;user=root;password=varde", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,7 +56,7 @@ public partial class CinebitDbContext : DbContext
                 .HasConstraintName("fk_chat_utente");
         });
 
-        modelBuilder.Entity<Preferiti>(entity =>
+        modelBuilder.Entity<Preferito>(entity =>
         {
             entity.HasKey(e => e.IdPrefe).HasName("PRIMARY");
 

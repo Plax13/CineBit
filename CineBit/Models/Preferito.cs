@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CineBit.Models;
 
-public partial class Preferiti
+public partial class Preferito
 {
     public int IdPrefe { get; set; }
 
