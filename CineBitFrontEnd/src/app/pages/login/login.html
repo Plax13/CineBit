@@ -10,7 +10,7 @@
         Inserisci email e password.
       </p>
 
-      <form class="mt-8 flex flex-col gap-4">
+      <form class="mt-8 flex flex-col gap-4" (ngSubmit)="onSubmit()">
         <div>
           <label class="text-white/70 text-sm">Email</label>
           <input
@@ -33,23 +33,26 @@
           />
         </div>
 
+        <!-- Messaggio di errore -->
+        @if (errore) {
+          <p class="text-red-400 text-sm">{{ errore }}</p>
+        }
+
         <div class="flex items-center justify-between text-sm mt-1">
           <label class="flex items-center gap-2 text-white/60">
             <input type="checkbox" class="accent-[#55BBEF]" />
             Ricordami
           </label>
-          <a class="text-[#55BBEF] hover:underline" routerLink="forgot">
+          <a class="text-[#55BBEF] hover:underline" routerLink="/forgot">
             Password dimenticata?
           </a>
         </div>
 
         <div class="mt-6 flex flex-col gap-3">
-        <a routerLink="" class="w-full">
           <ui-button variant="primary" type="submit">Entra</ui-button>
-        </a>
-        <a routerLink="" class="w-full">
-          <ui-button variant="secondary">Torna alla home</ui-button>
-        </a>
+          <a routerLink="/" class="w-full">
+            <ui-button variant="secondary">Torna alla home</ui-button>
+          </a>
         </div>
       </form>
     </div>
