@@ -15,8 +15,11 @@ public partial class CinebitDbContext : DbContext
         : base(options)
     {
     }
-
-    public virtual DbSet<Chat> Chats { get; set; }
+    
+    // commentiamo la chiamata al modello della chat 
+    // al momento non serve preche è stata rimossa la tabella chat dal db 
+    // ma nel caso dovessimo inserirla nuovamente serve
+    //public virtual DbSet<Chat> Chats { get; set; }
 
     public virtual DbSet<Preferito> Preferitis { get; set; }
 
@@ -29,32 +32,35 @@ public partial class CinebitDbContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
+    // commentiamo la chiamata al modello della chat 
+    // al momento non serve preche è stata rimossa la tabella chat dal db 
+    // ma nel caso dovessimo inserirla nuovamente serve
 
-        modelBuilder.Entity<Chat>(entity =>
-        {
-            entity.HasKey(e => e.IdChat).HasName("PRIMARY");
+        // modelBuilder.Entity<Chat>(entity =>
+        // {
+        //     entity.HasKey(e => e.IdChat).HasName("PRIMARY");
 
-            entity.ToTable("chat");
+        //     entity.ToTable("chat");
 
-            entity.HasIndex(e => e.IdUtente, "fk_chat_utente");
+        //     entity.HasIndex(e => e.IdUtente, "fk_chat_utente");
 
-            entity.Property(e => e.IdChat).HasColumnName("id_chat");
-            entity.Property(e => e.DataCreazione)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("data_creazione");
-            entity.Property(e => e.IdUtente).HasColumnName("id_utente");
-            entity.Property(e => e.Prompt)
-                .HasColumnType("text")
-                .HasColumnName("prompt");
-            entity.Property(e => e.Response)
-                .HasColumnType("text")
-                .HasColumnName("response");
+        //     entity.Property(e => e.IdChat).HasColumnName("id_chat");
+        //     entity.Property(e => e.DataCreazione)
+        //         .HasDefaultValueSql("CURRENT_TIMESTAMP")
+        //         .HasColumnType("timestamp")
+        //         .HasColumnName("data_creazione");
+        //     entity.Property(e => e.IdUtente).HasColumnName("id_utente");
+        //     entity.Property(e => e.Prompt)
+        //         .HasColumnType("text")
+        //         .HasColumnName("prompt");
+        //     entity.Property(e => e.Response)
+        //         .HasColumnType("text")
+        //         .HasColumnName("response");
 
-            entity.HasOne(d => d.IdUtenteNavigation).WithMany(p => p.Chats)
-                .HasForeignKey(d => d.IdUtente)
-                .HasConstraintName("fk_chat_utente");
-        });
+        //     entity.HasOne(d => d.IdUtenteNavigation).WithMany(p => p.Chats)
+        //         .HasForeignKey(d => d.IdUtente)
+        //         .HasConstraintName("fk_chat_utente");
+        // });
 
         modelBuilder.Entity<Preferito>(entity =>
         {
