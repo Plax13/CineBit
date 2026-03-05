@@ -14,6 +14,8 @@ builder.Services.AddScoped(typeof(IUtentiRepo), typeof(UtentiRepository));
 
 builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
+builder.Services.AddScoped<IPreferitiRepository, PreferitiRepository>();
+
 // Registrazione HttpClientFactory
 builder.Services.AddHttpClient();
 
