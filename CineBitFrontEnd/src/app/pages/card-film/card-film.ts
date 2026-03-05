@@ -14,6 +14,7 @@ export class CardFilm {
   @Output() cliccata = new EventEmitter<number>();
  
   onClick() {
-    this.cliccata.emit(this.film.id);
+      console.log('CLICK CARD:', this.film.id, this.film.title);
+  this.cliccata.emit(this.film.id);
   }
 }

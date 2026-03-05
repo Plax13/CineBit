@@ -15,16 +15,40 @@
     }
 
     <section class="flex items-center justify-between">
-      <h2 class="text-lg md:text-xl font-semibold">Titoli del momento</h2>
-    </section>
+  <h2 class="text-lg md:text-xl font-semibold">Titoli del momento</h2>
 
-    <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-      @for (film of movies; track film.id) {
-        <div class="block">
-          <card-film [film]="film"></card-film>
-        </div>
-      }
-    </section>
+  <!-- frecce (desktop) -->
+  <div class="hidden md:flex gap-2">
+    <button
+      class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
+      (click)="scrollRow(-1)"
+      aria-label="Scroll left"
+    >
+      ‹
+    </button>
+    <button
+      class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
+      (click)="scrollRow(1)"
+      aria-label="Scroll right"
+    >
+      ›
+    </button>
+  </div>
+</section>
+
+<section
+  #row
+  class="flex gap-4 overflow-x-auto pb-2
+         snap-x snap-mandatory scroll-smooth
+         [-ms-overflow-style:none] [scrollbar-width:none]
+         [&::-webkit-scrollbar]:hidden"
+>
+  @for (film of movies; track film.id) {
+    <div class="snap-start shrink-0 w-[160px] sm:w-[190px] md:w-[220px]">
+      <card-film [film]="film" (cliccata)="onCardClick($event)"></card-film>
+    </div>
+  }
+</section>
   </div>
 
   <div footer></div>

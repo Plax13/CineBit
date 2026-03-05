@@ -4,8 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Linq;
 
-namespace CineBit.Controllers
-{
+
     // Questo attributo imposto il routing dell'API
     //tutte le chiamate partiranno da api/film
     [Route("api/[controller]")]
@@ -122,5 +121,45 @@ namespace CineBit.Controllers
 
             return Ok(risultato);
         }
+
+
+public record FilmCardDto(
+    int Id,
+    string Titolo,
+    string Anno,
+    string Immagine);
+
+     [HttpGet("home")]
+public async Task<IActionResult> GetHome([FromQuery] int take = 20)
+{
+    string url = $"https://api.themoviedb.org/3/movie/popular?api_key={_apiKey}&language=it-IT&page=1";
+    var response = await _httpClient.GetAsync(url);
+
+    if (!response.IsSuccessStatusCode)
+        return StatusCode((int)response.StatusCode, "Errore TMDB popular");
+
+    var json = await response.Content.ReadAsStringAsync();
+    var root = JsonDocument.Parse(json).RootElement;
+
+    var cards = root.GetProperty("results")
+        .EnumerateArray()
+        .Take(take)
+        .Select(x => new FilmCardDto(
+            x.GetProperty("id").GetInt32(),
+            x.GetProperty("title").GetString() ?? "",
+            (x.GetProperty("release_date").GetString() ?? "").Length >= 4
+                ? x.GetProperty("release_date").GetString()!.Substring(0, 4)
+                : "-",
+            "https://image.tmdb.org/t/p/w500" + (x.GetProperty("poster_path").GetString() ?? "")
+        ))
+        .ToList();
+
+    return Ok(cards);
     }
+
+
+
+
+
+       
 }
