@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+
 
 type Variant = 'primary' | 'secondary';
 type BtnType = 'button' | 'submit' | 'reset';
@@ -8,7 +8,7 @@ type BtnType = 'button' | 'submit' | 'reset';
   selector: 'ui-button',
   standalone: true,
   templateUrl: './ui-button.html',
-  imports: [RouterLink,]
+  imports: []
 })
 export class UiButton {
   @Input() variant: Variant = 'primary';

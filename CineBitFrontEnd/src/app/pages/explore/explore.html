@@ -1,1 +1,31 @@
-<p>explore works!</p>
+<ui-page>
+  <div header class="px-6 md:px-10 pb-2">
+    <p class="text-[#D9D9D9] text-sm">Cosa vuoi guardare oggi?</p>
+  </div>
+
+  <div main class="flex flex-col gap-8">
+    <searchbar [(query)]="query" (searchEvent)="onSearch()"></searchbar>
+
+    @if (loading) {
+      <p class="text-white/60 text-center">Caricamento...</p>
+    }
+
+    @if (error) {
+      <p class="text-red-400 text-center">{{ error }}</p>
+    }
+
+    <section class="flex items-center justify-between">
+      <h2 class="text-lg md:text-xl font-semibold">Titoli del momento</h2>
+    </section>
+
+    <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      @for (film of movies; track film.id) {
+        <div class="block">
+          <card-film [film]="film"></card-film>
+        </div>
+      }
+    </section>
+  </div>
+
+  <div footer></div>
+</ui-page>

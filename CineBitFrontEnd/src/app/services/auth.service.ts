@@ -11,11 +11,11 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
     login(email: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/api/auth/login`, { email, password });
+    return this.http.post(`${environment.apiUrl}/api/Auth/login`, { email, password });
   }
 
-  register(nome: string, email: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/api/auth/register`, { nome, email, password });
+  register(nome: string, cognome:string, email: string, password: string) {
+    return this.http.post(`${environment.apiUrl}/api/Auth/register`, { nome,cognome, email, password });
   }
 
   logout() {

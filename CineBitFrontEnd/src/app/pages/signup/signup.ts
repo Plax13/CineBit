@@ -8,12 +8,13 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
-  imports: [UiPage, UiButton, FormsModule, RouterLink],  // ← rimosso RouterOutlet
+  imports: [UiPage, UiButton, FormsModule, RouterLink],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
 export class Signup {
   nome = '';
+  cognome = '';  
   email = '';
   password = '';
   confirmPassword = '';
@@ -31,18 +32,19 @@ export class Signup {
       this.passwordsMatch &&
       this.password.length >= 8 &&
       this.nome.length > 0 &&
+      this.cognome.length > 0 &&  // ← aggiunto!
       this.email.length > 0
     );
   }
 
   onSubmit() {
-  this.auth.register(this.nome, this.email, this.password).subscribe({
-    next: () => {
-      this.router.navigate(['login']);
-    },
-    error: () => {
-      console.error('Errore durante la registrazione');
-    }
-  });
-}
+    this.auth.register(this.nome, this.cognome, this.email, this.password).subscribe({  // ← aggiunto cognome!
+      next: () => {
+        this.router.navigate(['login']);
+      },
+      error: (err) => {
+        console.error('Errore:', err.error);  // ← messaggio dettagliato
+      }
+    });
+  }
 }
