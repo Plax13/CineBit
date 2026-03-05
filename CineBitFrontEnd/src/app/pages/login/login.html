@@ -1,0 +1,67 @@
+<ui-page>
+  <div header class="px-6 md:px-10 pt-2">
+    <p class="text-[#D9D9D9] text-sm">Accedi al tuo account</p>
+  </div>
+
+  <div main class="flex flex-col gap-8">
+    <div class="max-w-[520px] w-full mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold">Inserisci i tuoi dati per accedere</h2>
+      <p class="mt-2 text-white/60 text-sm">
+        Inserisci email e password.
+      </p>
+
+      <form class="mt-8 flex flex-col gap-4" (ngSubmit)="onSubmit()">
+        <div>
+          <label class="text-white/70 text-sm">Email</label>
+          <input
+            type="email"
+            class="mt-2 w-full h-11 rounded-xl bg-white/5 border border-white/15 px-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[#55BBEF]"
+            placeholder="name@email.com"
+            [(ngModel)]="email"
+            name="email"
+          />
+        </div>
+
+        <div>
+          <label class="text-white/70 text-sm">Password</label>
+          <input
+            type="password"
+            class="mt-2 w-full h-11 rounded-xl bg-white/5 border border-white/15 px-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[#55BBEF]"
+            placeholder="••••••••"
+            [(ngModel)]="password"
+            name="password"
+          />
+        </div>
+
+        <!-- Messaggio di errore -->
+        @if (errore) {
+          <p class="text-red-400 text-sm">{{ errore }}</p>
+        }
+
+        <div class="flex items-center justify-between text-sm mt-1">
+          <label class="flex items-center gap-2 text-white/60">
+            <input type="checkbox" class="accent-[#55BBEF]" />
+            Ricordami
+          </label>
+          <a class="text-[#55BBEF] hover:underline" routerLink="/forgot">
+            Password dimenticata?
+          </a>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-3">
+          <ui-button variant="primary" type="submit">Entra</ui-button>
+          <a routerLink="/" class="w-full">
+            <ui-button variant="secondary">Torna alla home</ui-button>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div footer class="px-6 md:px-10">
+    <p class="text-white/50 text-sm">
+      Non hai un account?
+      <a class="text-[#55BBEF] hover:underline" routerLink="/signup">Sign up</a>
+    </p>
+  </div>
+</ui-page>
