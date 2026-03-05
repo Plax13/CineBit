@@ -1,0 +1,19 @@
+<div class="block relative aspect-[3/4] rounded-[20px] overflow-hidden bg-white/10" (click)="onClick()">
+  
+  <img 
+    [src]="film.poster_path ? 'https://image.tmdb.org/t/p/w500' + film.poster_path : 'assets/placeholder.png'"
+    [alt]="film.title"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+
+  <div class="absolute inset-0 bg-gradient-to-b from-white/5 via-black/30 to-black"></div>
+
+  <div class="absolute inset-0 flex flex-col justify-end p-4">
+    <p class="text-white font-medium leading-tight">{{ film.title }}</p>
+    <p class="text-white/60 text-sm">{{ film.release_date }}</p>
+  </div>
+
+  <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/50 border border-white/10 text-white/70 text-xs">
+    Film
+  </div>
+</div>

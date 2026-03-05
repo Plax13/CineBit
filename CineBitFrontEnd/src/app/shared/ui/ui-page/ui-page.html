@@ -1,0 +1,23 @@
+<div class="min-h-dvh bg-black text-white flex flex-col">
+  <!-- HEADER (con brand fisso) -->
+    <header class="pt-8">
+    <!-- brand con padding -->
+    <div class="px-6 md:px-10 pb-4">
+      @if (showBrand) {
+        <h1 class="text-4xl md:text-5xl font-semibold tracking-wide">CINEBIT</h1>
+      }
+    </div>
+
+    <!-- slot header FULL WIDTH (niente padding qui) -->
+    <ng-content select="[header]"></ng-content>
+  </header>
+  <!-- MAIN -->
+  <main class="flex-1 px-6 md:px-10 pb-10 flex flex-col">
+    <ng-content select="[main]"></ng-content>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="px-6 md:px-10 pb-6">
+    <ng-content select="[footer]"></ng-content>
+  </footer>
+</div>
