@@ -18,5 +18,19 @@ public class PreferitiRepository : IPreferitiRepository
             .ToListAsync();
     }
 
+    public async Task<bool> AddPreferitoAsync(Preferito preferito)
+    {
+        try
+        {
+            _context.Preferitis.Add(preferito);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (DbUpdateException)
+        {
+            // Questo scatta se il film è già presente (violazione UNIQUE KEY)
+            return false;
+        }
+    }
 
 }
