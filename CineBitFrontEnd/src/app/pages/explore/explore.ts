@@ -29,6 +29,10 @@ export class Explore implements OnInit {
     private router: Router
   ) {}
 
+  ngAfterViewInit() {
+  this.loadHome();
+  }
+
   ngOnInit() {
     this.loadHome();
   }
@@ -41,6 +45,7 @@ export class Explore implements OnInit {
       next: (res) => {
         this.movies = res;
         this.loading = false;
+        
       },
       error: (e) => {
         console.log(e);
