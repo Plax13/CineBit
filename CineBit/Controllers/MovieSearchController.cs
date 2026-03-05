@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System;
+
 
 
     [ApiController]
@@ -35,6 +38,8 @@ using System.Threading.Tasks;
 
                 // 2. Usa i parametri per cercare su TMDB
                 var movies = await _tmdbService.SearchMoviesAsync(aiParams);
+                Console.WriteLine("Parametri estratti da Gemma: " + JsonSerializer.Serialize(aiParams));
+                Console.WriteLine("Film trovati su TMDB: " + JsonSerializer.Serialize(movies));
 
                 // 3. Ritorna la lista dei film al frontend (Angular/Postman)
                 return Ok(movies);
@@ -45,3 +50,4 @@ using System.Threading.Tasks;
             }
         }
     }
+
