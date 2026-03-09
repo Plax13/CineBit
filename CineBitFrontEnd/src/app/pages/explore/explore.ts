@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { UiPage } from "../../shared/ui/ui-page/ui-page";
 import { FormsModule } from '@angular/forms';
 import { Searchbar } from "../searchbar/searchbar";
@@ -22,35 +22,42 @@ export class Explore implements OnInit {
   error: string | null = null;
 
   @ViewChild('row', { static: false }) rowRef!: ElementRef<HTMLElement>;
-
+//Questo "aggancia" l'elemento HTML con `#row` (il `<section>` dello scroll) alla variabile `rowRef`. 
+// Con `rowRef.nativeElement` puoi accedere direttamente al DOM. `static: false` significa che l'elemento 
+// viene cercato **dopo** che il template è renderizzato.
   constructor(
     private aiService: AiService,
     private filmService: FilmService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  ngAfterViewInit() {
-  this.loadHome();
-  }
+  
 
   ngOnInit() {
     this.loadHome();
+    
   }
 
   // caricamento iniziale veloce (API backend)
   loadHome() {
     this.loading = true;
+    console.log('1. loadHome chiamato');
 
     this.filmService.getHome(20).subscribe({
       next: (res) => {
+        console.log('2. dati ricevuti:', res);
         this.movies = res;
+        console.log('3. movies aggiornato:', this.movies);
         this.loading = false;
+        this.cdr.detectChanges();
         
       },
       error: (e) => {
         console.log(e);
         this.error = 'Errore caricamento iniziale';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -61,15 +68,21 @@ export class Explore implements OnInit {
 
     this.loading = true;
     this.error = null;
+    console.log('1. onSearch chiamato, query:', this.query);
 
     this.aiService.searchMovies(this.query).subscribe({
       next: (res: any) => {
+        console.log('2. risultati ricevuti:', JSON.stringify(res).slice(0, 300));
         this.movies = res;
+        console.log('3. movies aggiornato:', this.movies);
         this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: () => {
-        this.error = 'Errore durante la ricerca';
+      error: (e) => {
+        console.log('ERRORE:', e);
+        this.error = 'Errore caricamento iniziale';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -87,4 +100,7 @@ export class Explore implements OnInit {
   onCardClick(id: number) {
     this.router.navigate(['/movie', id]);
   }
+  goToProfile(): void {
+  this.router.navigate(['/profilo']);
+}
 }

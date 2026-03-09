@@ -13,3 +13,5 @@ export class FilmService {
     return this.http.get<IFilmCard[]>(`${this.baseUrl}/api/Film/home?take=${take}`);
   }
 }
+
+
