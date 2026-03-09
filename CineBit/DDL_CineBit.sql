@@ -29,12 +29,18 @@ CREATE TABLE preferiti (
     UNIQUE KEY unique_user_movie (id_utente, tmdb_id)
 );
 
--- 3. Tabella CHAT
-CREATE TABLE chat (
-    id_chat INT AUTO_INCREMENT PRIMARY KEY,
-    id_utente INT NOT NULL,
-    prompt TEXT NOT NULL,
-    response TEXT NOT NULL,
-    data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_chat_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente) ON DELETE CASCADE
-);
+-- -- 3. Tabella CHAT
+-- CREATE TABLE chat (
+--     id_chat INT AUTO_INCREMENT PRIMARY KEY,
+--     id_utente INT NOT NULL,
+--     prompt TEXT NOT NULL,
+--     response TEXT NOT NULL,
+--     data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     CONSTRAINT fk_chat_utente FOREIGN KEY (id_utente) REFERENCES utenti(id_utente) ON DELETE CASCADE
+-- );
+
+-- in quanto inutilizzata è stato deciso di rimuovere la tabella chat dal db,
+-- rimarrà commentata in caso ci fosse bisogno in futuro
+-- eliminazione della tabella chat:
+-- use cinebit_db ---->nel caso non sia selezionato il db di cinebit su mysql
+drop table chat;  

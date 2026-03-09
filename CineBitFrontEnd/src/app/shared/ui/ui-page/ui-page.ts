@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { IFilmCard } from '../../../models/i-film-card';
 @Component({
   selector: 'ui-page',
   imports: [],
@@ -8,4 +9,6 @@ import { Input } from '@angular/core';
 })
 export class UiPage {
       @Input() showBrand = true; // se in una pagina non lo vuoi
+      movies: IFilmCard[] = [];
+      loading = false;
 }

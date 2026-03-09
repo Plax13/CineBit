@@ -14,14 +14,14 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-    email = ''
+    username = ''
     password = ''
     errore = '';
 
   constructor(private auth: AuthService, private router: Router) {}
 
   onSubmit() {
-  this.auth.login(this.email, this.password).subscribe({
+  this.auth.login(this.username, this.password).subscribe({
     next: () => {
       this.auth.isLogged = true;
       this.router.navigate(['explore']);

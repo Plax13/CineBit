@@ -8,7 +8,10 @@ using System.Text.Json.Serialization;
     }
 
     public class Movie
-    {
+    {   
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
         [JsonPropertyName("title")]
         public string Title { get; set; }
 

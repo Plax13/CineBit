@@ -20,8 +20,11 @@ public partial class Utenti
     public string? Ruolo { get; set; }
 
     public DateTime? DataUltimaModifica { get; set; }
-
-    public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
+    
+    // commentiamo la chiamata al modello della chat 
+    // al momento non serve preche è stata rimossa la tabella chat dal db 
+    // ma nel caso dovessimo inserirla nuovamente serve
+    //public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
 
     public virtual ICollection<Preferito> Preferitis { get; set; } = new List<Preferito>();
 }
