@@ -1,81 +1,87 @@
 <ui-page>
-<div header class="px-6 md:px-10 pb-2">
-  <div class="flex items-center justify-between">
-    <p class="text-[#D9D9D9] text-sm">Cosa vuoi guardare oggi?</p>
-
-<button
-  class="h-12 w-12 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 transition flex items-center justify-center"
-  (click)="goToProfile()"
-  aria-label="Vai al profilo"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="h-7 w-7 text-white"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    stroke-width="1.8"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.125a7.5 7.5 0 0115 0"
-    />
-  </svg>
-</button>
-  </div>
+<div header class="relative px-6 md:px-10 pb-2 min-h-[290px] overflow-hidden">
+<!-- HERO dietro -->
+<div class="absolute inset-0 z-0 pointer-events-none">
+<ui-hero-banner></ui-hero-banner>
 </div>
-
-
+ 
+    <!-- CONTENUTO davanti -->
+<div class="relative z-10 flex flex-col gap-8 pt-6">
+<div class="flex items-center justify-between">
+<p class="text-[#D9D9D9] text-sm">Cosa vuoi guardare oggi?</p>
+ 
+        <button
+          class="h-12 w-12 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 transition flex items-center justify-center"
+          (click)="goToProfile()"
+          aria-label="Vai al profilo"
+>
+<svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-7 w-7 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.8"
+>
+<path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.125a7.5 7.5 0 0115 0"
+            />
+</svg>
+</button>
+</div>
+ 
+      <searchbar [(query)]="query" (searchEvent)="onSearch()"></searchbar>
+</div>
+</div>
+ 
   <div main class="flex flex-col gap-8">
-    <searchbar [(query)]="query" (searchEvent)="onSearch()"></searchbar>
-
     @if (loading) {
-      <p class="text-white/60 text-center">Caricamento...</p>
+<p class="text-white/60 text-center">Caricamento...</p>
     }
-
+ 
     @if (error) {
-      <p class="text-red-400 text-center">{{ error }}</p>
+<p class="text-red-400 text-center">{{ error }}</p>
     }
-
+ 
     <section class="flex items-center justify-between">
-  <h2 class="text-lg md:text-xl font-semibold">Titoli del momento</h2>
-
-  <!-- frecce (desktop) -->
-  <div class="hidden md:flex gap-2">
-    <button
-      class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
-      (click)="scrollRow(-1)"
-      aria-label="Scroll left"
-    >
-      ‹
-    </button>
-    <button
-      class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
-      (click)="scrollRow(1)"
-      aria-label="Scroll right"
-    >
-      ›
-    </button>
-  </div>
+<h2 class="text-lg md:text-xl font-semibold">Titoli del momento</h2>
+ 
+      <div class="hidden md:flex gap-2">
+<button
+          class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
+          (click)="scrollRow(-1)"
+          aria-label="Scroll left"
+>
+          ‹
+</button>
+<button
+          class="h-10 w-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10"
+          (click)="scrollRow(1)"
+          aria-label="Scroll right"
+>
+          ›
+</button>
+</div>
 </section>
-
-@if (!loading) {
-  <section
-    #row
-    class="flex gap-4 overflow-x-auto pb-2
-           snap-x snap-mandatory scroll-smooth
-           [-ms-overflow-style:none] [scrollbar-width:none]
-           [&::-webkit-scrollbar]:hidden"
-  >
-    @for (film of movies; track film.id) {
-      <div class="snap-start shrink-0 w-[160px] sm:w-[190px] md:w-[220px]">
-        <card-film [film]="film" (cliccata)="onCardClick($event)"></card-film>
-      </div>
+ 
+    @if (!loading) {
+<section
+        #row
+        class="flex gap-4 overflow-x-auto pb-2
+               snap-x snap-mandatory scroll-smooth
+               [-ms-overflow-style:none] [scrollbar-width:none]
+               [&::-webkit-scrollbar]:hidden"
+>
+        @for (film of movies; track film.id) {
+<div class="snap-start shrink-0 w-[160px] sm:w-[190px] md:w-[220px]">
+<card-film [film]="film" (cliccata)="onCardClick($event)"></card-film>
+</div>
+        }
+</section>
     }
-  </section>
-}
-  </div>
-
+</div>
+ 
   <div footer></div>
 </ui-page>
