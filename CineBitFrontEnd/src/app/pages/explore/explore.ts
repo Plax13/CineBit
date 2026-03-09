@@ -7,10 +7,11 @@ import { AiService } from '../../services/ai-service';
 import { IFilmCard } from '../../models/i-film-card';
 import { Router } from '@angular/router';
 import { FilmService } from '../../services/film-service';
+import { UiHeroBanner } from '../../shared/ui/ui-hero-banner/ui-hero-banner';
 
 @Component({
   selector: 'explore',
-  imports: [UiPage, FormsModule, Searchbar, CardFilm],
+  imports: [UiPage, FormsModule, Searchbar, CardFilm,UiHeroBanner],
   templateUrl: './explore.html',
   styleUrl: './explore.css',
 })
