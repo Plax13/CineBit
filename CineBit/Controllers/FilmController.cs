@@ -90,7 +90,8 @@ public class FilmController : ControllerBase
             annoUscita = movieData.GetProperty("release_date").GetString()?.Substring(0, 4),
             durata = movieData.GetProperty("runtime").GetInt32(),
             regista = regista,
-            attori = attori
+            attori = attori,
+            poster_path = movieData.GetProperty("poster_path").GetString()
         };
 
         return Ok(risultato);
