@@ -29,73 +29,224 @@
 
     @if (film()) {
       <!-- HERO -->
-      <section class="relative rounded-[20px] overflow-hidden h-[280px] md:h-[420px] bg-white/10">
-        <img
-          [src]="posterUrl()"
-          [alt]="film().titolo ?? film().title ?? 'Poster'"
-          class="absolute inset-0 w-full h-full object-cover"
-        />
+      <section
+        class="relative rounded-[30px] overflow-hidden min-h-[450px] bg-white/5 border border-white/10"
+      >
+        <div class="absolute inset-0 z-0">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w1280' + film().backdrop_path"
+            class="w-full h-full object-cover blur-[60px] opacity-40 scale-110"
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"
+          ></div>
+        </div>
 
-        <!-- overlay scuro cinematic -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/45 to-black"></div>
+        <div class="relative z-10 flex flex-col md:flex-row gap-8 p-6 md:p-10">
+          <div class="flex-shrink-0 self-center md:self-start">
+            <img
+              [src]="posterUrl()"
+              [alt]="film().titolo ?? film().title"
+              class="w-[180px] md:w-[260px] rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.7)] border border-white/10 object-cover"
+            />
+          </div>
 
-        <!-- titolo sopra l’immagine -->
-        <div class="absolute bottom-0 left-0 right-0 p-5 md:p-7">
-          <h1 class="text-2xl md:text-4xl font-semibold leading-tight">
-            {{ film().titolo ?? film().title }}
-          </h1>
+          <div class="flex flex-col">
+            <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 leading-tight">
+              {{ film().titolo ?? film().title }}
+              <span class="text-white/40 font-light">({{ film().annoUscita ?? film().year }})</span>
+            </h1>
 
-          <div class="mt-2 flex flex-wrap gap-2 text-sm text-white/70">
-            <span class="px-3 py-1 rounded-full bg-black/45 border border-white/10">
-              {{ film().annoUscita ?? film().year ?? '-' }}
-            </span>
-            <span class="px-3 py-1 rounded-full bg-black/45 border border-white/10">
-              {{ (film().durata ?? film().runtime ?? '-') }} min
-            </span>
-            @if (film().regista) {
-              <span class="px-3 py-1 rounded-full bg-black/45 border border-white/10">
-                Regia: {{ film().regista }}
+            <div class="flex flex-wrap items-center gap-3 mb-6">
+              <span
+                class="flex items-center px-2 py-1 rounded bg-yellow-500/20 border border-yellow-500/40 text-yellow-500 text-xs font-bold"
+              >
+                ★ {{ film().voto > 0 ? film().voto : 'N/A' }}
               </span>
+              <span class="text-white/60 text-sm border-l border-white/20 pl-3">
+                {{ film().durata ?? film().runtime }} min
+              </span>
+              <div class="flex gap-2 border-l border-white/20 pl-3">
+                @for (g of splitList(film().genere); track g) {
+                  <span class="text-white/50 text-xs uppercase tracking-wider self-center"
+                    >{{ g }}{{ !$last ? ' • ' : '' }}</span
+                  >
+                }
+              </div>
+            </div>
+
+            @if (film().descrizione) {
+              <div class="mb-6 max-w-2xl">
+                <p
+                  class="text-white/90 text-base md:text-lg leading-relaxed font-light line-clamp-4 md:line-clamp-none"
+                >
+                  {{ film().descrizione }}
+                </p>
+              </div>
             }
+
+            @if (film().regista) {
+              <div class="mb-8">
+                <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] mb-1 text-xs">
+                  Director
+                </p>
+                <p class="text-white font-semibold text-lg">{{ film().regista }}</p>
+              </div>
+            }
+
+            <div class="mt-auto">
+              @if (film().providers && film().providers.length > 0) {
+                <div class="mb-6 animate-fade-in">
+                  <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] mb-3">
+                    Disponibile su
+                  </p>
+                  <div class="flex flex-wrap gap-3">
+                    @for (p of film().providers; track p.nome) {
+                      <div class="group relative" [title]="p.nome">
+                        <img
+                          [src]="'https://image.tmdb.org/t/p/original' + p.logo"
+                          class="w-10 h-10 rounded-xl border border-white/10 shadow-lg group-hover:scale-110 group-hover:border-[#55BBEF]/50 transition-all duration-300"
+                          [alt]="p.nome"
+                        />
+                        <div
+                          class="absolute inset-0 rounded-xl bg-[#55BBEF]/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        ></div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <p class="text-white/30 text-[10px] uppercase tracking-widest mb-6 italic">
+                  Non disponibile in abbonamento (solo noleggio o cinema)
+                </p>
+              }
+
+              <div class="flex items-center gap-4 mt-auto">
+                <button
+                  type="button"
+                  (click)="guardaOra()"
+                  class="group flex items-center gap-3 px-10 h-14 rounded-full bg-[#55BBEF] hover:bg-[#44aadb] transition-all transform hover:scale-105 active:scale-95 text-black font-bold uppercase tracking-widest shadow-[0_10px_30px_rgba(85,187,239,0.3)]"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6 group-hover:animate-pulse"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Guarda Ora</span>
+                </button>
+
+                <button
+                  type="button"
+                  (click)="togglePreferito()"
+                  class="h-14 w-14 rounded-full border border-white/20 bg-white/5 hover:bg-red-500/20 hover:border-red-500/50 transition-all flex items-center justify-center group shadow-xl active:scale-90"
+                  title="Aggiungi ai preferiti"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6 text-white group-hover:text-red-500 transition-colors"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- INFO PANEL -->
-      <section class="rounded-[20px] bg-white/5 border border-white/10 p-5 md:p-7 flex flex-col gap-4">
-        @if (film().genere) {
+      <section class="rounded-[30px] bg-white/5 border border-white/10 p-6 md:p-10">
+        @if (film().attori && film().attori.length > 0) {
           <div>
-            <p class="text-white/60 text-sm mb-2">Generi</p>
-            <div class="flex flex-wrap gap-2">
-              @for (g of splitList(film().genere); track g) {
-                <span class="px-3 py-1 rounded-full bg-black/40 border border-white/10 text-white/80 text-sm">
-                  {{ g }}
-                </span>
+            <h3 class="text-white font-bold text-xl mb-6">Cast principale</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-4">
+              @for (a of film().attori; track a.nome) {
+                <div class="flex flex-col items-center group cursor-pointer">
+                  <div
+                    class="relative overflow-hidden rounded-2xl mb-3 shadow-lg border border-white/5 w-full aspect-[3/4]"
+                  >
+                    <img
+                      [src]="actorImageUrl(a)"
+                      [alt]="a.nome"
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <p class="text-white font-medium text-xs text-center line-clamp-1 w-full">
+                    {{ a.nome }}
+                  </p>
+                  <p class="text-white/40 text-[10px] text-center line-clamp-1 w-full">
+                    {{ a.character ?? 'Attore' }}
+                  </p>
+                </div>
               }
             </div>
           </div>
         }
+      </section>
+    }
+    <div class="flex flex-col gap-6 mt-4">
+      <h3 class="text-white font-bold text-xl px-2">Media & Extra</h3>
 
-        @if (film().attori) {
-          <div>
-            <p class="text-white/60 text-sm mb-2">Attori</p>
-            <p class="text-white/80 leading-relaxed">
-              {{ film().attori }}
-            </p>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        @if (film().trailerKey) {
+          <div class="lg:col-span-2">
+            <div
+              class="rounded-[30px] overflow-hidden border border-white/10 shadow-2xl bg-black aspect-video"
+            >
+              <iframe
+                class="w-full h-full"
+                [src]="'https://www.youtube.com/embed/' + film().trailerKey | safeUrl"
+                frameborder="0"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
           </div>
         }
 
-        <!-- CTA placeholder -->
-        <div class="pt-2">
-          <button
-            type="button"
-            class="w-full md:w-auto px-6 h-11 rounded-full bg-[#55BBEF] text-black font-medium"
-          >
-            Play
-          </button>
+        <div class="flex flex-col gap-4">
+          <div class="grid grid-cols-2 gap-3">
+            @for (img of film().galleriaSfondi; track img) {
+              <div
+                class="aspect-video rounded-2xl overflow-hidden border border-white/10 group cursor-pointer shadow-lg"
+              >
+                <img
+                  [src]="'https://image.tmdb.org/t/p/w500' + img"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  alt="Movie backdrop"
+                />
+              </div>
+            }
+          </div>
+
+          @if (!film().trailerKey) {
+            <div
+              class="h-full flex items-center justify-center border border-dashed border-white/20 rounded-3xl p-10"
+            >
+              <p class="text-white/30 text-sm text-center">
+                Nessun trailer disponibile per questo titolo
+              </p>
+            </div>
+          }
         </div>
-      </section>
-    }
+      </div>
+    </div>
   </div>
 
   <div footer></div>
