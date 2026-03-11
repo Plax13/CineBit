@@ -17,13 +17,12 @@ public class FilmController : ControllerBase
     }
 
     // ==========================
-    // CARD SINGOLA
+    // CARD SINGOLA (Usata per i suggerimenti o ricerche rapide)
     // ==========================
     [HttpGet("{id}/card")]
     public async Task<IActionResult> GetCardFilm(int id)
     {
         string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
-
         var response = await _httpClient.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
@@ -32,79 +31,103 @@ public class FilmController : ControllerBase
         var json = await response.Content.ReadAsStringAsync();
         var data = JsonDocument.Parse(json).RootElement;
 
-        var card = new
+        return Ok(new
         {
             id = id,
             title = data.GetProperty("title").GetString(),
             release_date = data.GetProperty("release_date").GetString()?.Substring(0, 4),
             poster_path = data.GetProperty("poster_path").GetString()
-        };
-
-        return Ok(card);
+        });
     }
 
     // ==========================
-    // DETTAGLI FILM
+    // DETTAGLI FILM (La pagina principale)
     // ==========================
     [HttpGet("{id}/dettagli")]
     public async Task<IActionResult> GetDettagliFilm(int id)
     {
-        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
+        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT&append_to_response=videos,images,watch/providers&include_image_language=en,null";
         var movieResponse = await _httpClient.GetAsync(movieUrl);
 
         if (!movieResponse.IsSuccessStatusCode)
             return StatusCode((int)movieResponse.StatusCode, "Errore TMDB film");
 
-        var movieJson = await movieResponse.Content.ReadAsStringAsync();
-        var movieData = JsonDocument.Parse(movieJson).RootElement;
+        var movieData = JsonDocument.Parse(await movieResponse.Content.ReadAsStringAsync()).RootElement;
 
         string creditsUrl = $"https://api.themoviedb.org/3/movie/{id}/credits?api_key={_apiKey}&language=it-IT";
-        var creditsResponse = await _httpClient.GetAsync(creditsUrl);
+        var creditsData = JsonDocument.Parse(await _httpClient.GetStringAsync(creditsUrl)).RootElement;
 
-        if (!creditsResponse.IsSuccessStatusCode)
-            return StatusCode((int)creditsResponse.StatusCode, "Errore TMDB credits");
+        string regista = creditsData.GetProperty("crew").EnumerateArray()
+            .FirstOrDefault(x => x.GetProperty("job").GetString() == "Director")
+            .GetProperty("name").GetString() ?? "";
 
-        var creditsJson = await creditsResponse.Content.ReadAsStringAsync();
-        var creditsData = JsonDocument.Parse(creditsJson).RootElement;
+        var attori = creditsData.GetProperty("cast").EnumerateArray().Take(10).Select(x => new {
+            nome = x.GetProperty("name").GetString(),
+            immagine = x.GetProperty("profile_path").GetString(),
+            character = x.GetProperty("character").GetString()
+        }).ToList();
 
-        var crewElement = creditsData.GetProperty("crew")
-            .EnumerateArray()
-            .FirstOrDefault(x => x.GetProperty("job").GetString() == "Director");
+        var videoKey = "";
+        if (movieData.TryGetProperty("videos", out var vEl))
+        {
+            var video = vEl.GetProperty("results").EnumerateArray()
+                .FirstOrDefault(v => v.GetProperty("type").GetString() == "Trailer" && v.GetProperty("site").GetString() == "YouTube");
+            if (video.ValueKind != JsonValueKind.Undefined) videoKey = video.GetProperty("key").GetString();
+        }
 
-        string regista = crewElement.ValueKind != JsonValueKind.Undefined
-            ? crewElement.GetProperty("name").GetString()
-            : "";
+        var sfondi = new List<string>();
+        if (movieData.TryGetProperty("images", out var iEl))
+        {
+            sfondi = iEl.GetProperty("backdrops").EnumerateArray().Take(6)
+                .Select(img => img.GetProperty("file_path").GetString()!).ToList();
+        }
 
-        var attori = creditsData.GetProperty("cast")
-            .EnumerateArray()
-            .Take(5)
-            .Select(x => x.GetProperty("name").GetString())
-            .ToList();
+        var providers = new List<object>();
+        if (movieData.TryGetProperty("watch/providers", out var wp))
+        {
+            var results = wp.GetProperty("results");
+            JsonElement countryData;
 
-        var risultato = new
+            if (results.TryGetProperty("IT", out countryData) || results.TryGetProperty("US", out countryData))
+            {
+                JsonElement list;
+                if (countryData.TryGetProperty("flatrate", out list) ||
+                    countryData.TryGetProperty("ads", out list) ||
+                    countryData.TryGetProperty("rent", out list))
+                {
+                    providers = list.EnumerateArray().Select(p => new {
+                        nome = p.GetProperty("provider_name").GetString(),
+                        logo = p.GetProperty("logo_path").GetString()
+                    }).Cast<object>().Distinct().ToList();
+                }
+            }
+        }
+
+        return Ok(new
         {
             titolo = movieData.GetProperty("title").GetString(),
-            genere = movieData.GetProperty("genres")
-                .EnumerateArray()
-                .Select(g => g.GetProperty("name").GetString()),
-            annoUscita = movieData.GetProperty("release_date").GetString()?.Substring(0, 4),
+            descrizione = movieData.GetProperty("overview").GetString(),
+            voto = Math.Round(movieData.GetProperty("vote_average").GetDouble(), 1),
+            genere = movieData.GetProperty("genres").EnumerateArray().Select(g => g.GetProperty("name").GetString()),
+            annoUscita = movieData.GetProperty("release_date").GetString()?.Split('-')[0],
             durata = movieData.GetProperty("runtime").GetInt32(),
-            regista = regista,
-            attori = attori,
-            poster_path = movieData.GetProperty("poster_path").GetString()
-        };
-
-        return Ok(risultato);
+            regista,
+            attori,
+            poster_path = movieData.GetProperty("poster_path").GetString(),
+            backdrop_path = movieData.GetProperty("backdrop_path").GetString(),
+            trailerKey = videoKey,
+            galleriaSfondi = sfondi,
+            providers
+        });
     }
 
     // ==========================
-    // HOME FILM (per Explore)
+    // HOME FILM (Lista Popular)
     // ==========================
     [HttpGet("home")]
     public async Task<IActionResult> GetHome([FromQuery] int take = 20)
     {
         string url = $"https://api.themoviedb.org/3/movie/popular?api_key={_apiKey}&language=it-IT&page=1";
-
         var response = await _httpClient.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)

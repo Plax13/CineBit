@@ -30,8 +30,6 @@ public class PreferitiController : ControllerBase
         return Ok(preferitiDto);
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> AggiungiPreferito([FromBody] PreferitoDto dto)
     {
