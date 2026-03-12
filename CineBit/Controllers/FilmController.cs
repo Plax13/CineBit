@@ -17,13 +17,12 @@ public class FilmController : ControllerBase
     }
 
     // ==========================
-    // CARD SINGOLA
+    // CARD SINGOLA (Usata per i suggerimenti o ricerche rapide)
     // ==========================
     [HttpGet("{id}/card")]
     public async Task<IActionResult> GetCardFilm(int id)
     {
         string url = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
-
         var response = await _httpClient.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
@@ -32,31 +31,29 @@ public class FilmController : ControllerBase
         var json = await response.Content.ReadAsStringAsync();
         var data = JsonDocument.Parse(json).RootElement;
 
-        var card = new
+        return Ok(new
         {
             id = id,
             title = data.GetProperty("title").GetString(),
             release_date = data.GetProperty("release_date").GetString()?.Substring(0, 4),
             poster_path = data.GetProperty("poster_path").GetString()
-        };
-
-        return Ok(card);
+        });
     }
 
     // ==========================
-    // DETTAGLI FILM
+    // DETTAGLI FILM (La pagina principale)
     // ==========================
     [HttpGet("{id}/dettagli")]
     public async Task<IActionResult> GetDettagliFilm(int id)
     {
-        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT&append_to_response=videos,images,watch/providers";
+        // Usiamo l'URL con include_image_language per avere più sfondi (preso da origin)
+        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT&append_to_response=videos,images,watch/providers&include_image_language=en,null";
         var movieResponse = await _httpClient.GetAsync(movieUrl);
 
         if (!movieResponse.IsSuccessStatusCode)
             return StatusCode((int)movieResponse.StatusCode, "Errore TMDB film");
 
-        var movieJson = await movieResponse.Content.ReadAsStringAsync();
-        var movieData = JsonDocument.Parse(movieJson).RootElement;
+        var movieData = JsonDocument.Parse(await movieResponse.Content.ReadAsStringAsync()).RootElement;
 
         // Recupero Credits (Regista e Attori)
         string creditsUrl = $"https://api.themoviedb.org/3/movie/{id}/credits?api_key={_apiKey}&language=it-IT";
@@ -74,8 +71,9 @@ public class FilmController : ControllerBase
 
         var attori = creditsData.GetProperty("cast")
             .EnumerateArray()
-            .Take(8)
-            .Select(x => new {
+            .Take(10) // Ne prendiamo 10 come voleva origin
+            .Select(x => new
+            {
                 nome = x.TryGetProperty("name", out var n) ? n.GetString() : "Sconosciuto",
                 character = x.TryGetProperty("character", out var c) ? c.GetString() : "N/D",
                 immagine = x.TryGetProperty("profile_path", out var p) ? p.GetString() : null
@@ -94,25 +92,31 @@ public class FilmController : ControllerBase
                 trailerKey = trailer.GetProperty("key").GetString();
         }
 
-        // --- GESTIONE PROVIDERS E WATCH LINK (UNIFICATA) ---
+ // --- GESTIONE PROVIDERS ---
         var providers = new List<object>();
         string watchLink = null;
 
         if (movieData.TryGetProperty("watch/providers", out var wp) && wp.TryGetProperty("results", out var res))
         {
-            if (res.TryGetProperty("IT", out var itProviders))
+            // DICHIARIAMO LA VARIABILE UNA VOLTA SOLA QUI
+            JsonElement countryData;
+
+            // Cerchiamo IT (priorità) o US come backup
+            if (res.TryGetProperty("IT", out countryData) || res.TryGetProperty("US", out countryData))
             {
-                // Prendo il link ufficiale TMDB per l'Italia
-                if (itProviders.TryGetProperty("link", out var l))
+                if (countryData.TryGetProperty("link", out var l))
                     watchLink = l.GetString();
 
-                // Estraggo la lista dei servizi streaming (Flatrate)
-                if (itProviders.TryGetProperty("flatrate", out var flatrate))
+                JsonElement list;
+                if (countryData.TryGetProperty("flatrate", out list) || 
+                    countryData.TryGetProperty("ads", out list) || 
+                    countryData.TryGetProperty("rent", out list))
                 {
-                    providers = flatrate.EnumerateArray().Select(p => new {
+                    providers = list.EnumerateArray().Select(p => new
+                    {
                         nome = p.TryGetProperty("provider_name", out var pn) ? pn.GetString() : "N/D",
                         logo = p.TryGetProperty("logo_path", out var lp) ? lp.GetString() : null
-                    }).Cast<object>().ToList();
+                    }).Cast<object>().Distinct().ToList();
                 }
             }
         }
@@ -122,13 +126,13 @@ public class FilmController : ControllerBase
         if (movieData.TryGetProperty("images", out var imgs) && imgs.TryGetProperty("backdrops", out var backdrops))
         {
             galleria = backdrops.EnumerateArray()
-                .Take(4)
+                .Take(6)
                 .Select(i => i.TryGetProperty("file_path", out var path) ? path.GetString() : null)
                 .Where(path => path != null)
-                .ToList();
+                .ToList()!;
         }
 
-        var risultato = new
+        return Ok(new
         {
             id = id,
             titolo = movieData.TryGetProperty("title", out var title) ? title.GetString() : "Senza Titolo",
@@ -147,19 +151,16 @@ public class FilmController : ControllerBase
             providers = providers,
             watchLink = watchLink,
             galleriaSfondi = galleria
-        };
-
-        return Ok(risultato);
+        });
     }
 
     // ==========================
-    // HOME FILM (per Explore)
+    // HOME FILM (Lista Popular)
     // ==========================
     [HttpGet("home")]
     public async Task<IActionResult> GetHome([FromQuery] int take = 20)
     {
         string url = $"https://api.themoviedb.org/3/movie/popular?api_key={_apiKey}&language=it-IT&page=1";
-
         var response = await _httpClient.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
