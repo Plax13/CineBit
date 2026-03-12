@@ -1,0 +1,15 @@
+.chart-container {
+  display: flex;
+  align-items: flex-end; /* Spinge le barre in basso */
+  justify-content: space-around;
+  height: 160px; /* Altezza fissa necessaria per il calcolo delle % */
+}
+
+.bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%; /* Occupa tutta l'altezza del container */
+  justify-content: flex-end; /* Allinea il contenuto in basso */
+  flex: 1;
+}

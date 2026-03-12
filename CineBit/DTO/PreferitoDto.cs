@@ -8,4 +8,6 @@ public class PreferitoDto
     public int IdUtente { get; set; }
     public string? TitoloCache { get; set; }
     public DateTime? DataAggiunta { get; set; }
+    public string? PosterPathCache { get; set; }
+    public string? GenereCache { get; set; }
 }

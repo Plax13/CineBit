@@ -22,7 +22,6 @@ export class Searchbar {
   }
  
   onSearch() {
-    console.log('Bottone cliccato', this.query);
     this.searchEvent.emit();
   }
 }

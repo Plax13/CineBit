@@ -1,0 +1,76 @@
+/* ai-loader.css */
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centra orizzontalmente proiettore e testo */
+    min-height: 200px;
+    margin: 40px 0;
+    gap: 20px;
+    width: 100%;
+}
+
+.projector-loader {
+    width: 240px;
+}
+
+.loader-text {
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: #55BBEF;
+    font-weight: 400;
+    text-transform: uppercase;
+    
+    /* TRUCCO PER LA CENTRATURA PERFETTA */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    
+    /* Questo crea un "vuoto" a sinistra grande quanto i puntini a destra */
+    /* Così la parola è esattamente in asse col proiettore */
+    padding-left: 24px; 
+}
+
+.loader-text::after {
+    content: '...';
+    display: inline-block;
+    width: 24px; /* Larghezza fissa per i puntini */
+    text-align: left;
+    margin-left: 4px; /* Spazio tra parola e puntini */
+    animation: smooth-dots 1.5s infinite steps(4);
+}
+
+/* Animazione dei puntini con clip-path */
+@keyframes smooth-dots {
+    0%   { clip-path: inset(0 100% 0 0); }
+    25%  { clip-path: inset(0 66% 0 0); }
+    50%  { clip-path: inset(0 33% 0 0); }
+    75%  { clip-path: inset(0 0% 0 0); }
+    100% { clip-path: inset(0 100% 0 0); }
+}
+
+/* Animazione Bobine */
+.spin-fast, .spin-slow {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: spin 3s linear infinite;
+}
+.spin-fast { animation-duration: 2s; }
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Animazione Nastro (Pellicola) */
+.film-strand {
+    stroke-dasharray: 8;
+    stroke-linecap: round;
+    animation: moveStrand 0.8s linear infinite;
+    filter: blur(0.5px);
+}
+
+@keyframes moveStrand {
+    to { stroke-dashoffset: -20; }
+}

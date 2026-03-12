@@ -15,5 +15,9 @@ public partial class Preferito
 
     public DateTime? DataAggiunta { get; set; }
 
+    public string? PosterPathCache { get; set; }
+
     public virtual Utenti IdUtenteNavigation { get; set; } = null!;
+
+    public string? GenereCache { get; set; }
 }

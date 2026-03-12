@@ -32,7 +32,7 @@ public class UserService : IUserService
 
     }
 
-    public async Task LoginAsync(LoginRequest request)
+    public async Task<Utenti> LoginAsync(LoginRequest request)
     {
         var email = request.Email.Trim().ToLower();
 
@@ -46,6 +46,7 @@ public class UserService : IUserService
         if (!validPassword)
             throw new UnauthorizedAccessException("Credenziali non valide");
 
+        return user;
 
     }
 }

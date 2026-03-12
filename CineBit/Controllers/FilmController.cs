@@ -49,7 +49,7 @@ public class FilmController : ControllerBase
     [HttpGet("{id}/dettagli")]
     public async Task<IActionResult> GetDettagliFilm(int id)
     {
-        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT";
+        string movieUrl = $"https://api.themoviedb.org/3/movie/{id}?api_key={_apiKey}&language=it-IT&append_to_response=videos,images,watch/providers";
         var movieResponse = await _httpClient.GetAsync(movieUrl);
 
         if (!movieResponse.IsSuccessStatusCode)
@@ -58,40 +58,95 @@ public class FilmController : ControllerBase
         var movieJson = await movieResponse.Content.ReadAsStringAsync();
         var movieData = JsonDocument.Parse(movieJson).RootElement;
 
+        // Recupero Credits (Regista e Attori)
         string creditsUrl = $"https://api.themoviedb.org/3/movie/{id}/credits?api_key={_apiKey}&language=it-IT";
         var creditsResponse = await _httpClient.GetAsync(creditsUrl);
-
-        if (!creditsResponse.IsSuccessStatusCode)
-            return StatusCode((int)creditsResponse.StatusCode, "Errore TMDB credits");
-
         var creditsJson = await creditsResponse.Content.ReadAsStringAsync();
         var creditsData = JsonDocument.Parse(creditsJson).RootElement;
 
-        var crewElement = creditsData.GetProperty("crew")
+        var directorElement = creditsData.GetProperty("crew")
             .EnumerateArray()
-            .FirstOrDefault(x => x.GetProperty("job").GetString() == "Director");
+            .FirstOrDefault(x => x.TryGetProperty("job", out var j) && j.GetString() == "Director");
 
-        string regista = crewElement.ValueKind != JsonValueKind.Undefined
-            ? crewElement.GetProperty("name").GetString()
-            : "";
+        string regista = directorElement.ValueKind != JsonValueKind.Undefined
+            ? directorElement.GetProperty("name").GetString()
+            : "Non disponibile";
 
         var attori = creditsData.GetProperty("cast")
             .EnumerateArray()
-            .Take(5)
-            .Select(x => x.GetProperty("name").GetString())
-            .ToList();
+            .Take(8)
+            .Select(x => new {
+                nome = x.TryGetProperty("name", out var n) ? n.GetString() : "Sconosciuto",
+                character = x.TryGetProperty("character", out var c) ? c.GetString() : "N/D",
+                immagine = x.TryGetProperty("profile_path", out var p) ? p.GetString() : null
+            }).ToList();
+
+        // Estrazione Trailer YouTube
+        string trailerKey = null;
+        if (movieData.TryGetProperty("videos", out var videos))
+        {
+            var videoList = videos.GetProperty("results").EnumerateArray();
+            var trailer = videoList.FirstOrDefault(v =>
+                v.TryGetProperty("type", out var t) && t.GetString() == "Trailer" &&
+                v.TryGetProperty("site", out var s) && s.GetString() == "YouTube");
+
+            if (trailer.ValueKind != JsonValueKind.Undefined)
+                trailerKey = trailer.GetProperty("key").GetString();
+        }
+
+        // --- GESTIONE PROVIDERS E WATCH LINK (UNIFICATA) ---
+        var providers = new List<object>();
+        string watchLink = null;
+
+        if (movieData.TryGetProperty("watch/providers", out var wp) && wp.TryGetProperty("results", out var res))
+        {
+            if (res.TryGetProperty("IT", out var itProviders))
+            {
+                // Prendo il link ufficiale TMDB per l'Italia
+                if (itProviders.TryGetProperty("link", out var l))
+                    watchLink = l.GetString();
+
+                // Estraggo la lista dei servizi streaming (Flatrate)
+                if (itProviders.TryGetProperty("flatrate", out var flatrate))
+                {
+                    providers = flatrate.EnumerateArray().Select(p => new {
+                        nome = p.TryGetProperty("provider_name", out var pn) ? pn.GetString() : "N/D",
+                        logo = p.TryGetProperty("logo_path", out var lp) ? lp.GetString() : null
+                    }).Cast<object>().ToList();
+                }
+            }
+        }
+
+        // Galleria Immagini
+        var galleria = new List<string>();
+        if (movieData.TryGetProperty("images", out var imgs) && imgs.TryGetProperty("backdrops", out var backdrops))
+        {
+            galleria = backdrops.EnumerateArray()
+                .Take(4)
+                .Select(i => i.TryGetProperty("file_path", out var path) ? path.GetString() : null)
+                .Where(path => path != null)
+                .ToList();
+        }
 
         var risultato = new
         {
-            titolo = movieData.GetProperty("title").GetString(),
-            genere = movieData.GetProperty("genres")
-                .EnumerateArray()
-                .Select(g => g.GetProperty("name").GetString()),
-            annoUscita = movieData.GetProperty("release_date").GetString()?.Substring(0, 4),
-            durata = movieData.GetProperty("runtime").GetInt32(),
+            id = id,
+            titolo = movieData.TryGetProperty("title", out var title) ? title.GetString() : "Senza Titolo",
+            descrizione = movieData.TryGetProperty("overview", out var ov) ? ov.GetString() : "",
+            genere = movieData.TryGetProperty("genres", out var gen)
+                     ? string.Join(", ", gen.EnumerateArray().Select(g => g.GetProperty("name").GetString()))
+                     : "N/D",
+            annoUscita = movieData.TryGetProperty("release_date", out var rel) ? rel.GetString()?.Split('-')[0] : "N/A",
+            durata = movieData.TryGetProperty("runtime", out var run) && run.ValueKind != JsonValueKind.Null ? run.GetInt32() : 0,
+            voto = movieData.TryGetProperty("vote_average", out var vote) ? Math.Round(vote.GetDouble(), 1) : 0,
             regista = regista,
             attori = attori,
-            poster_path = movieData.GetProperty("poster_path").GetString()
+            poster_path = movieData.TryGetProperty("poster_path", out var post) ? post.GetString() : null,
+            backdrop_path = movieData.TryGetProperty("backdrop_path", out var back) ? back.GetString() : null,
+            trailerKey = trailerKey,
+            providers = providers,
+            watchLink = watchLink,
+            galleriaSfondi = galleria
         };
 
         return Ok(risultato);
@@ -126,5 +181,36 @@ public class FilmController : ControllerBase
             .ToList();
 
         return Ok(cards);
+    }
+
+    // ==========================
+    // FILM SIMILI
+    // ==========================
+    [HttpGet("{id}/simili")]
+    public async Task<IActionResult> GetSimili(int id)
+    {
+        string url = $"https://api.themoviedb.org/3/movie/{id}/similar?api_key={_apiKey}&language=it-IT&page=1";
+
+        var response = await _httpClient.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+            return StatusCode((int)response.StatusCode, "Errore TMDB simili");
+
+        var json = await response.Content.ReadAsStringAsync();
+        var root = JsonDocument.Parse(json).RootElement;
+
+        var simili = root.GetProperty("results")
+            .EnumerateArray()
+            .Take(12)
+            .Select(x => new
+            {
+                id = x.GetProperty("id").GetInt32(),
+                title = x.GetProperty("title").GetString(),
+                release_date = x.GetProperty("release_date").GetString(),
+                poster_path = x.GetProperty("poster_path").GetString()
+            })
+            .ToList();
+
+        return Ok(simili);
     }
 }

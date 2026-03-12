@@ -12,6 +12,10 @@ export class FilmService {
   getHome(take = 20): Observable<IFilmCard[]> {
     return this.http.get<IFilmCard[]>(`${this.baseUrl}/api/Film/home?take=${take}`);
   }
+
+  getSimili(id: string): Observable<IFilmCard[]> {
+    return this.http.get<IFilmCard[]>(`${this.baseUrl}/api/Film/${id}/simili`);
+  }
 }
 
 

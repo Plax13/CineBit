@@ -40,6 +40,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseRouting();
 // --- abilita CORS per comunicazion porta 4200 <-> 5000 ---
 app.UseCors();
 

@@ -8,10 +8,12 @@ import { IFilmCard } from '../../models/i-film-card';
 import { Router } from '@angular/router';
 import { FilmService } from '../../services/film-service';
 import { UiHeroBanner } from '../../shared/ui/ui-hero-banner/ui-hero-banner';
+import { AiLoader } from '../ai-loader/ai-loader';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'explore',
-  imports: [UiPage, FormsModule, Searchbar, CardFilm,UiHeroBanner],
+  imports: [UiPage, FormsModule, Searchbar, CardFilm, UiHeroBanner, AiLoader],
   templateUrl: './explore.html',
   styleUrl: './explore.css',
 })
@@ -21,41 +23,45 @@ export class Explore implements OnInit {
   movies: IFilmCard[] = [];
   loading = false;
   error: string | null = null;
+  isAiThinking = false;
+  loadingText = 'Analizzando la tua richiesta...';
+  private loadingInterval: any;
 
   @ViewChild('row', { static: false }) rowRef!: ElementRef<HTMLElement>;
-//Questo "aggancia" l'elemento HTML con `#row` (il `<section>` dello scroll) alla variabile `rowRef`. 
-// Con `rowRef.nativeElement` puoi accedere direttamente al DOM. `static: false` significa che l'elemento 
-// viene cercato **dopo** che il template è renderizzato.
+  //Questo "aggancia" l'elemento HTML con `#row` (il `<section>` dello scroll) alla variabile `rowRef`. 
+  // Con `rowRef.nativeElement` puoi accedere direttamente al DOM. `static: false` significa che l'elemento 
+  // viene cercato dopo che il template è renderizzato.
   constructor(
     private aiService: AiService,
     private filmService: FilmService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) { }
 
-  
+    get user() {
+      return this.authService.currentUser();
+    }
 
   ngOnInit() {
+    if (this.aiService.lastSearchResults.length > 0) {
+    this.movies = this.aiService.lastSearchResults;
+    this.query = this.aiService.lastSearchQuery;
+  } else {
     this.loadHome();
-    
+  }
   }
 
   // caricamento iniziale veloce (API backend)
   loadHome() {
     this.loading = true;
-    console.log('1. loadHome chiamato');
-
     this.filmService.getHome(20).subscribe({
       next: (res) => {
-        console.log('2. dati ricevuti:', res);
         this.movies = res;
-        console.log('3. movies aggiornato:', this.movies);
         this.loading = false;
         this.cdr.detectChanges();
-        
       },
       error: (e) => {
-        console.log(e);
         this.error = 'Errore caricamento iniziale';
         this.loading = false;
         this.cdr.detectChanges();
@@ -64,29 +70,44 @@ export class Explore implements OnInit {
   }
 
   // ricerca tramite AI
-  onSearch() {
+ onSearch() {
     if (!this.query.trim()) return;
 
-    this.loading = true;
+    this.isAiThinking = true; 
     this.error = null;
-    console.log('1. onSearch chiamato, query:', this.query);
+
+    this.startLoadingTexts();
 
     this.aiService.searchMovies(this.query).subscribe({
       next: (res: any) => {
-        console.log('2. risultati ricevuti:', JSON.stringify(res).slice(0, 300));
         this.movies = res;
-        console.log('3. movies aggiornato:', this.movies);
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.aiService.lastSearchResults = res;
+        
+        this.stopLoading();
       },
       error: (e) => {
-        console.log('ERRORE:', e);
-        this.error = 'Errore caricamento iniziale';
-        this.loading = false;
-        this.cdr.detectChanges();
+        console.log('Erorre ricerca ai:', e);
+        this.error = '';
+        this.stopLoading();
       }
     });
   }
+
+private startLoadingTexts() {
+  const texts = [
+    "Preparando i Popcorn",
+    "Caricando la bobina",
+    "Proiezione in corso",
+    "Ciak si gira"
+  ];
+  let i = 0;
+  this.loadingText = texts[0];
+  this.loadingInterval = setInterval(() => {
+    i = (i + 1) % texts.length;
+    this.loadingText = texts[i];
+    this.cdr.detectChanges();
+  }, 4000);
+}
 
   // scroll orizzontale
   scrollRow(dir: 1 | -1) {
@@ -102,6 +123,13 @@ export class Explore implements OnInit {
     this.router.navigate(['/movie', id]);
   }
   goToProfile(): void {
-  this.router.navigate(['/profilo']);
-}
+    this.router.navigate(['/profile']);
+  }
+
+  private stopLoading() {
+    this.isAiThinking = false;
+    this.loading = false;
+    if (this.loadingInterval) clearInterval(this.loadingInterval);
+    this.cdr.detectChanges();
+  }
 }

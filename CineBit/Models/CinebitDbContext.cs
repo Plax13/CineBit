@@ -32,9 +32,9 @@ public partial class CinebitDbContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
-    // commentiamo la chiamata al modello della chat 
-    // al momento non serve preche è stata rimossa la tabella chat dal db 
-    // ma nel caso dovessimo inserirla nuovamente serve
+        // commentiamo la chiamata al modello della chat 
+        // al momento non serve preche è stata rimossa la tabella chat dal db 
+        // ma nel caso dovessimo inserirla nuovamente serve
 
         // modelBuilder.Entity<Chat>(entity =>
         // {
@@ -71,14 +71,27 @@ public partial class CinebitDbContext : DbContext
             entity.HasIndex(e => new { e.IdUtente, e.TmdbId }, "unique_user_movie").IsUnique();
 
             entity.Property(e => e.IdPrefe).HasColumnName("id_prefe");
+
             entity.Property(e => e.DataAggiunta)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("data_aggiunta");
+
             entity.Property(e => e.IdUtente).HasColumnName("id_utente");
+
             entity.Property(e => e.TitoloCache)
                 .HasMaxLength(255)
                 .HasColumnName("titolo_cache");
+
+            // --- NUOVA COLONNA MAPPATA QUI ---
+            entity.Property(e => e.PosterPathCache)
+                .HasMaxLength(255)
+                .HasColumnName("poster_path_cache");
+            // --------------------------------
+
+            entity.Property(e => e.GenereCache)
+                .HasMaxLength(255)
+                .HasColumnName("genere_cache"); // Deve essere uguale al nome su MySQL
             entity.Property(e => e.TmdbId).HasColumnName("tmdb_id");
 
             entity.HasOne(d => d.IdUtenteNavigation).WithMany(p => p.Preferitis)

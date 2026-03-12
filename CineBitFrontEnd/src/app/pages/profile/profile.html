@@ -1,0 +1,180 @@
+<ui-page title="Profilo Utente">
+  <div main>
+<section class="relative overflow-hidden -mx-6 md:-mx-10 px-6 md:px-10 py-20 border-b border-white/10 bg-black">
+  
+  <div class="absolute inset-0 z-0">
+    <div class="absolute -top-32 -right-24 w-[600px] h-[600px] bg-[#55BBEF]/30 rounded-full blur-[100px]"></div>
+    
+    <div class="absolute -bottom-24 right-0 w-[400px] h-[400px] bg-[#2B5E77]/40 rounded-full blur-[80px]"></div>
+
+    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto">
+    
+    <div class="relative group">
+      <div class="absolute -inset-2 bg-gradient-to-tr from-[#55BBEF] to-[#2B5E77] rounded-full blur-lg opacity-30 group-hover:opacity-60 transition duration-700"></div>
+      
+      <div class="relative h-44 w-44 md:h-56 md:w-56 rounded-full bg-gradient-to-tr from-[#55BBEF] to-[#2B5E77] flex items-center justify-center text-7xl md:text-8xl font-black text-white shadow-2xl border-4 border-white/20 select-none">
+        {{ auth.currentUser()?.nome?.charAt(0) }}{{ auth.currentUser()?.cognome?.charAt(0) }}
+      </div>
+    </div>
+
+    <div class="flex-1 text-center md:text-left">
+      <h1 class="text-5xl md:text-6xl font-black text-white mb-2 tracking-tight drop-shadow-xl">
+        {{ auth.currentUser()?.nome }} {{ auth.currentUser()?.cognome }}
+      </h1>
+      <p class="text-[#55BBEF] text-xl font-bold mb-6 drop-shadow-md opacity-90">{{ auth.currentUser()?.email }}</p>
+
+      <div class="flex flex-wrap justify-center md:justify-start gap-4">
+        <div class="px-6 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl">
+           <span class="text-white/90 text-sm font-bold">
+            <span class="text-[#55BBEF] mr-1">{{ listaPreferiti().length }}</span> Film salvati
+           </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <div class="max-w-6xl mx-auto px-4 py-12 flex flex-col lg:flex-row gap-12">
+      <section class="flex-1 min-w-0">
+        <h2 class="text-2xl font-bold text-white mb-8">I Tuoi Film Preferiti</h2>
+
+        @if (loading()) {
+          <div class="flex justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-[#55BBEF]"></div>
+          </div>
+        } @else if (listaPreferiti().length === 0) {
+          <div
+            class="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10 text-white/40"
+          >
+            La tua lista è vuota.
+          </div>
+        } @else {
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            @for (film of listaPreferiti(); track film.tmdbId) {
+              <div [routerLink]="['/movie', film.tmdbId]" class="group cursor-pointer">
+                <div
+                  class="relative aspect-[2/3] overflow-hidden rounded-2xl shadow-lg transition-all duration-500 group-hover:scale-105 group-hover:shadow-[#55BBEF]/20"
+                >
+                  <img
+                    [src]="posterUrl(film.posterPathCache)"
+                    class="w-full h-full object-cover"
+                    alt="Poster"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+                  >
+                    <p class="text-white text-xs font-bold leading-tight line-clamp-2">
+                      {{ film.titoloCache }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (consigliati().length > 0) {
+            <div class="mt-20 pt-10 border-t border-white/10">
+              <div class="flex flex-col gap-1 mb-8">
+                <h2 class="text-2xl font-bold text-white tracking-tight">Consigliati per te</h2>
+                <p class="text-white/40 text-xs uppercase tracking-widest font-bold">
+                  Basati sui tuoi generi preferiti:
+                  <span class="text-[#55BBEF]">{{ nomiGeneriTop() }}</span>
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                @for (film of consigliati(); track film.tmdbId) {
+                  <div [routerLink]="['/movie', film.tmdbId]" class="group cursor-pointer">
+                    <div
+                      class="relative aspect-[2/3] overflow-hidden rounded-2xl border border-white/5 transition-all duration-300 group-hover:border-[#55BBEF]/50 group-hover:shadow-[0_0_20px_rgba(85,187,239,0.1)]"
+                    >
+                      <img
+                        [src]="posterUrl(film.posterPathCache)"
+                        class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all"
+                      />
+                      <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+                      >
+                        <span class="text-white text-xs font-bold leading-tight line-clamp-2">{{
+                          film.titoloCache
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </section>
+
+      <aside class="w-full lg:w-80 flex flex-col gap-8">
+        @if (listaPreferiti().length > 0 && generiStat().length > 0) {
+          <div
+            class="bg-white/5 border border-white/10 rounded-[30px] p-6 sticky top-24 backdrop-blur-md"
+          >
+            <div class="flex items-center gap-3 mb-10">
+              <div class="h-6 w-1 bg-[#55BBEF] rounded-full shadow-[0_0_10px_#55BBEF]"></div>
+              <h3 class="text-white font-bold text-sm uppercase tracking-widest">
+                Panoramica Generi
+              </h3>
+            </div>
+
+            <div class="flex items-end justify-between h-32 gap-2 mb-4">
+              @for (stat of generiStat(); track stat.nome) {
+                <div class="flex-1 flex flex-col items-center group h-full justify-end">
+                  <span
+                    class="text-[10px] font-mono text-white/30 group-hover:text-white transition-colors mb-1"
+                  >
+                    {{ stat.count }}
+                  </span>
+                  <div
+                    class="w-full max-w-[30px] rounded-t-md transition-all duration-700 ease-out shadow-lg"
+                    [style.height.%]="(stat.count / generiStat()[0].count) * 100"
+                    [style.background]="
+                      'linear-gradient(to top, ' + stat.coloreEnd + ', ' + stat.coloreStart + ')'
+                    "
+                    [title]="stat.nome"
+                  ></div>
+                  <span class="text-[9px] uppercase tracking-tighter text-white/40 mt-2 font-bold">
+                    {{ stat.nome.substring(0, 3) }}
+                  </span>
+                </div>
+              }
+            </div>
+
+            <div class="mt-8 border-t border-white/5 pt-4">
+              <div class="flex flex-col gap-3">
+                @for (stat of generiStat(); track stat.nome) {
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-2 h-2 rounded-full"
+                        [style.background]="
+                          'linear-gradient(to right, ' +
+                          stat.coloreStart +
+                          ', ' +
+                          stat.coloreEnd +
+                          ')'
+                        "
+                      ></div>
+                      <span class="text-[11px] text-white/70">{{ stat.nome }}</span>
+                    </div>
+                    <span class="text-[10px] text-white/30">
+                      {{ ((stat.count / listaPreferiti().length) * 100).toFixed(0) }}%
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </aside>
+    </div>
+  </div>
+</ui-page>

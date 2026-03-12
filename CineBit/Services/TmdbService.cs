@@ -5,19 +5,21 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
+public class TmdbService
+{
+    private readonly HttpClient _httpClient;
+    private readonly string _tmdbApiKey;
 
-    public class TmdbService
+    public TmdbService(HttpClient httpClient, IConfiguration config)
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _tmdbApiKey;
+        _httpClient = httpClient;
+        // CORREZIONE: Punta al percorso reale nel tuo appsettings.json
+        _tmdbApiKey = config["TMDB:ApiKey"];
+    }
 
-        public TmdbService(HttpClient httpClient, IConfiguration config)
-        {
-            _httpClient = httpClient;
-            _tmdbApiKey = config["ApiSettings:TmdbApiKey"];
-        }
-
-        private async Task<string> GetPersonIdAsync(string name)
+    private async Task<string> GetPersonIdAsync(string name)
+    {
+        try
         {
             string url = $"https://api.themoviedb.org/3/search/person?api_key={_tmdbApiKey}&query={Uri.EscapeDataString(name)}&language=it-IT";
             var response = await _httpClient.GetStringAsync(url);
@@ -26,15 +28,23 @@ using Microsoft.Extensions.Configuration;
 
             if (results.GetArrayLength() > 0)
             {
-                return results[0].GetProperty("id").GetInt32().ToString();
+                return results[0].GetProperty("id").GetRawText();
             }
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Errore ricerca persona ({name}): {ex.Message}");
+        }
+        return null;
+    }
 
-        public async Task<List<Movie>> SearchMoviesAsync(AiParameters p)
+    public async Task<List<Movie>> SearchMoviesAsync(AiParameters p)
+    {
+        try
         {
             string url;
 
+            // Logica di costruzione URL (rimasta invariata, è corretta)
             if (!string.IsNullOrWhiteSpace(p.TitleQuery))
             {
                 url = $"https://api.themoviedb.org/3/search/movie?api_key={_tmdbApiKey}&query={Uri.EscapeDataString(p.TitleQuery)}&language=it-IT";
@@ -56,9 +66,26 @@ using Microsoft.Extensions.Configuration;
                 if (p.YearEnd > 0) url += $"&primary_release_date.lte={p.YearEnd}-12-31";
             }
 
-            var res = await _httpClient.GetStringAsync(url);
-            var data = JsonSerializer.Deserialize<TmdbResponse>(res);
+            // Usiamo GetAsync per poter controllare il successo prima di leggere la stringa
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMsg = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"TMDB ERROR {response.StatusCode}: {errorMsg}");
+                return new List<Movie>();
+            }
+
+            var res = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var data = JsonSerializer.Deserialize<TmdbResponse>(res, options);
 
             return data?.Results ?? new List<Movie>();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Errore Search: {ex.Message}");
+            return new List<Movie>(); // Ritorna lista vuota invece di crashare il server
+        }
     }
+}
